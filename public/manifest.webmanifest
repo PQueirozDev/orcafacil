@@ -1,0 +1,16 @@
+{
+  "name": "Orçafácil — Gerador de Orçamentos",
+  "short_name": "Orçafácil",
+  "description": "Crie orçamentos profissionais com fotos e gere PDF em minutos.",
+  "lang": "pt-BR",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
