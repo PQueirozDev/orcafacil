@@ -28,3 +28,7 @@ npm run build   # checagem de tipos + build de produção em dist/
 Stack: Vite, React, TypeScript, Tailwind CSS v4, Dexie (IndexedDB), React Router.
 
 Deploy na Vercel: `npx vercel deploy --prod`.
+
+## Licença
+
+MIT. Veja [LICENSE](LICENSE).

@@ -45,9 +45,45 @@ export function LayoutPublico() {
         <Outlet />
       </main>
       <footer className="border-t border-slate-200 bg-slate-50">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-slate-500 sm:flex-row">
-          <Marca />
-          <p>Protótipo de demonstração — nenhum pagamento é cobrado de verdade.</p>
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="sm:col-span-2">
+            <Marca />
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
+              Orçamentos profissionais com fotos, sua marca e PDF pronto para enviar. Protótipo em modo de testes: nenhum
+              pagamento é cobrado.
+            </p>
+          </div>
+          <nav aria-label="Produto" className="text-sm">
+            <h2 className="font-semibold text-slate-900">Produto</h2>
+            <ul className="mt-3 space-y-2 text-slate-500">
+              <li><a href="/#recursos" className="hover:text-slate-900">Recursos</a></li>
+              <li><Link to="/precos" className="hover:text-slate-900">Preços</Link></li>
+              <li><Link to="/app" className="hover:text-slate-900">Abrir o app</Link></li>
+            </ul>
+          </nav>
+          <nav aria-label="Legal" className="text-sm">
+            <h2 className="font-semibold text-slate-900">Legal</h2>
+            <ul className="mt-3 space-y-2 text-slate-500">
+              <li><Link to="/termos" className="hover:text-slate-900">Termos de uso</Link></li>
+              <li><Link to="/privacidade" className="hover:text-slate-900">Política de privacidade</Link></li>
+              <li>
+                <a href="https://github.com/PQueirozDev/orcafacil" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900">
+                  Código aberto (MIT)
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div className="border-t border-slate-200">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row">
+            <p>© {new Date().getFullYear()} Orçafácil. Todos os direitos reservados.</p>
+            <p>
+              Desenvolvido por{' '}
+              <a href="https://www.pqueirozdev.com.br/" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-700 hover:text-marca-600">
+                Pedro Queiroz
+              </a>
+            </p>
+          </div>
         </div>
       </footer>
     </div>
@@ -138,6 +174,11 @@ export function LayoutApp() {
           <Icone nome="sair" />
         </button>
       </div>
+      <p className="mt-3 px-1 text-[11px] text-slate-400">
+        <Link to="/termos" className="hover:text-slate-600">Termos</Link> ·{' '}
+        <Link to="/privacidade" className="hover:text-slate-600">Privacidade</Link> · por{' '}
+        <a href="https://www.pqueirozdev.com.br/" target="_blank" rel="noopener noreferrer" className="hover:text-slate-600">Pedro Queiroz</a>
+      </p>
     </div>
   )
 

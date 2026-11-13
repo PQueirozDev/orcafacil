@@ -138,6 +138,11 @@ export function Checkout() {
           <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-center text-xs text-amber-800">
             Modo de testes: nenhum dado é enviado e nada é cobrado. Os campos são opcionais.
           </p>
+          <p className="mt-3 text-center text-xs text-slate-500">
+            Ao continuar, você concorda com os{' '}
+            <Link to="/termos" className="font-semibold text-marca-600 hover:text-marca-700">Termos de uso</Link> e a{' '}
+            <Link to="/privacidade" className="font-semibold text-marca-600 hover:text-marca-700">Política de privacidade</Link>.
+          </p>
         </form>
 
         <aside className="cartao h-fit p-6">

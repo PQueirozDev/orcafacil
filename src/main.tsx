@@ -1,12 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import { Avisos } from './components/Avisos'
 import { LayoutApp, LayoutPublico } from './components/Layouts'
 import { Checkout } from './pages/Checkout'
 import { Entrar } from './pages/Entrar'
 import { Inicio } from './pages/Inicio'
+import { NaoEncontrada, Privacidade, Termos } from './pages/Legal'
 import { Precos } from './pages/Precos'
 import { Assinatura } from './pages/app/Assinatura'
 import { Clientes } from './pages/app/Clientes'
@@ -22,6 +23,9 @@ const rotas = createBrowserRouter([
     children: [
       { path: '/', element: <Inicio /> },
       { path: '/precos', element: <Precos /> },
+      { path: '/termos', element: <Termos /> },
+      { path: '/privacidade', element: <Privacidade /> },
+      { path: '*', element: <NaoEncontrada /> },
     ],
   },
   { path: '/entrar', element: <Entrar /> },
@@ -39,7 +43,6 @@ const rotas = createBrowserRouter([
       { path: 'assinatura', element: <Assinatura /> },
     ],
   },
-  { path: '*', element: <Navigate to="/" replace /> },
 ])
 
 // PWA: registra o service worker só no build de produção (no dev atrapalharia o recarregamento)
