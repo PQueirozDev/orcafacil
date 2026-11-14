@@ -25,7 +25,6 @@ import { calcularTotais, totalItem, validarOrcamento } from '../../lib/calculos'
 import { formatarMoeda, formatarNumero } from '../../lib/formato'
 import { layoutDoModelo, MODELOS } from '../../lib/modelos'
 import { editavel, podeMudar, ROTULO_STATUS, statusExibido } from '../../lib/status'
-import { usePlano } from '../../lib/plano'
 
 const LIMITE_HISTORICO = 60
 
@@ -62,7 +61,6 @@ export function EditorOrcamento() {
   const fila = useRef<Promise<void>>(Promise.resolve())
   const historico = useRef<{ passado: Orcamento[]; futuro: Orcamento[]; ultimo: number }>({ passado: [], futuro: [], ultimo: 0 })
   const [, forcar] = useState(0)
-  const plano = usePlano()
 
   useEffect(() => {
     db.orcamentos.get(idNum).then((o) => setOrc(o ?? null))
@@ -660,7 +658,7 @@ export function EditorOrcamento() {
             </div>
             <div className="max-h-[calc(100vh-9rem)] overflow-y-auto rounded-xl bg-slate-200/70 p-3">
               <PreviaA4>
-                <DocumentoOrcamento orcamento={orc} empresa={empresa} selo={!plano.carregando && !plano.pro} />
+                <DocumentoOrcamento orcamento={orc} empresa={empresa} />
               </PreviaA4>
             </div>
           </div>

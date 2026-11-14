@@ -44,14 +44,12 @@ export interface Snapshot {
   empresa: ReturnType<typeof empresaPublica>
   total: number
   emitidoEm: number
-  /** Plano grátis: mostra o selo do OrçaFácil no link */
-  selo?: boolean
 }
 
-export function montarSnapshot(o: Orcamento, e: Empresa, selo = false): Snapshot {
+export function montarSnapshot(o: Orcamento, e: Empresa): Snapshot {
   const { id: _id, sujo: _s, clienteUid: _c, ...orcamento } = o
   void _id, _s, _c
-  return { versao: 1, orcamento, empresa: empresaPublica(e), total: calcularTotais(o).total, emitidoEm: Date.now(), selo }
+  return { versao: 1, orcamento, empresa: empresaPublica(e), total: calcularTotais(o).total, emitidoEm: Date.now() }
 }
 
 export interface Link {
@@ -94,7 +92,7 @@ export async function listarLinks(orcamentoUid: string): Promise<Link[]> {
 }
 
 /** Cria um link novo. O orçamento é enviado à nuvem antes e passa a "pendente" (se era rascunho). */
-export async function criarLink(orcamentoId: number, opcoes: { validadeDias: number | null; permitePdf: boolean; selo: boolean }) {
+export async function criarLink(orcamentoId: number, opcoes: { validadeDias: number | null; permitePdf: boolean }) {
   const sb = exigir()
   const o = await db.orcamentos.get(orcamentoId)
   if (!o) throw new Error('Orçamento não encontrado.')
@@ -109,14 +107,11 @@ export async function criarLink(orcamentoId: number, opcoes: { validadeDias: num
   const { error } = await sb.from('compartilhamentos').insert({
     orcamento_id: atual.uid,
     token,
-    snapshot: montarSnapshot(atual, empresa, opcoes.selo),
+    snapshot: montarSnapshot(atual, empresa),
     permite_pdf: opcoes.permitePdf,
     expira_em: expira,
   })
-  if (error) {
-    if (/limite_plano_gratis/.test(error.message)) throw new Error('LIMITE_PLANO')
-    throw error
-  }
+  if (error) throw error
   await registrarEvento(atual.uid, 'compartilhamento', { expira: expira ?? undefined })
   return token
 }

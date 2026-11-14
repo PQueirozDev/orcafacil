@@ -63,7 +63,6 @@ export function Privacidade() {
       <section>
         <h2>5. Serviços de terceiros</h2>
         <ul>
-          <li><strong>Stripe</strong>: processamento das assinaturas do plano Pro (dados de cartão ficam com o Stripe).</li>
           <li><strong>Supabase</strong>: banco de dados, autenticação e armazenamento de imagens (servidores em São Paulo).</li>
           <li><strong>Vercel</strong>: hospedagem do site; pode registrar dados técnicos de acesso (IP, navegador, data e hora) para segurança.</li>
           <li><strong>Google Fonts</strong>: fornece a fonte Inter; ao carregar a fonte, seu navegador se conecta aos servidores do Google.</li>
@@ -102,7 +101,7 @@ export function Termos() {
   return (
     <PaginaLegal
       titulo="Termos de uso"
-      resumo="Resumo: o OrçaFácil tem um plano grátis e um plano Pro opcional, é oferecido “como está” e você é responsável pelo conteúdo dos orçamentos que cria e envia. O aceite pelo link é um aceite eletrônico simples, não uma assinatura digital certificada."
+      resumo="Resumo: o OrçaFácil é gratuito, é oferecido “como está” e você é responsável pelo conteúdo dos orçamentos que cria e envia. O aceite pelo link é um aceite eletrônico simples, não uma assinatura digital certificada."
     >
       <section>
         <h2>1. Sobre o serviço</h2>
@@ -112,16 +111,10 @@ export function Termos() {
         </p>
       </section>
       <section>
-        <h2>2. Planos, pagamento e cancelamento</h2>
+        <h2>2. Preço e aceite eletrônico</h2>
         <p>
-          O plano grátis não tem custo. O plano Pro é uma assinatura mensal ou anual paga com cartão pelo Stripe, que processa os
-          dados de pagamento; o OrçaFácil não recebe nem guarda números de cartão. A assinatura renova automaticamente e pode ser
-          cancelada a qualquer momento na página “Plano”, valendo até o fim do período já pago. O direito de arrependimento de 7
-          dias (art. 49 do CDC) pode ser exercido pelo contato desta página, com reembolso integral.
-        </p>
-        <p className="mt-2">
-          A aprovação de propostas pelo link registra nome, data e horário: é um aceite eletrônico simples e não substitui
-          assinatura digital certificada (ICP-Brasil) quando a lei ou o contrato exigirem.
+          O uso é gratuito e exige apenas uma conta. A aprovação de propostas pelo link registra nome, data e horário: é um aceite
+          eletrônico simples e não substitui assinatura digital certificada (ICP-Brasil) quando a lei ou o contrato exigirem.
         </p>
       </section>
       <section>
