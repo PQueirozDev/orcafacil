@@ -1,5 +1,5 @@
 // Service worker do Orçafácil: deixa o app funcionando offline.
-const VERSAO = 'orcafacil-v4'
+const VERSAO = 'orcafacil-v5'
 const ESSENCIAIS = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg', '/icon-192.png', '/icon-512.png']
 
 self.addEventListener('install', (e) => {

@@ -10,7 +10,7 @@ function PaginaLegal({ titulo, resumo, children }: { titulo: string; resumo: str
       <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900">
         <Icone nome="voltar" /> Voltar ao início
       </Link>
-      <h1 className="mt-6 font-display text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">{titulo}</h1>
+      <h1 className="mt-6 font-display text-4xl font-bold tracking-tight text-slate-900 uppercase sm:text-5xl">{titulo}</h1>
       <p className="mt-2 text-sm text-slate-500">Última atualização: {ATUALIZADO_EM}</p>
       <div className="mt-6 border-l-4 border-destaque-400 bg-superficie py-4 pr-4 pl-5 text-sm leading-relaxed text-slate-700">{resumo}</div>
       <div className="mt-10 space-y-8 text-[15px] leading-relaxed text-slate-700 [&_h2]:mb-2 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-slate-900 [&_li]:ml-5 [&_li]:list-disc [&_ul]:space-y-1">

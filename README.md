@@ -54,8 +54,6 @@ Nunca coloque a *service role key* ou a senha do banco no frontend nem no reposi
 4. (Recomendado) Em **Authentication → Emails → SMTP**, configure um provedor próprio. O envio padrão do Supabase tem limite baixo por hora e serve só para testes.
 5. (Opcional) Configure um cliente OAuth do Google com a URI de redirecionamento `https://SEU-PROJETO.supabase.co/auth/v1/callback` e habilite o provedor Google no Supabase. O botão aparece automaticamente depois da configuração; não coloque o Client Secret em variáveis `VITE_*`.
 
-Se o Google mostrar `Erro 400: redirect_uri_mismatch`, adicione a URL de callback indicada no erro em **Google Auth Platform → Clientes → cliente OAuth Web → URIs de redirecionamento autorizados**. Use o mesmo Client ID cadastrado no provedor Google do Supabase. Ao trocar de projeto Supabase, a callback também muda; alterar o código do site ou apenas a Site URL não corrige esse cadastro no Google.
-
 ### Estrutura do banco
 
 | Tabela | Conteúdo |

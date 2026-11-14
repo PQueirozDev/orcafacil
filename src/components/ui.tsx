@@ -54,8 +54,8 @@ import { ROTULO_STATUS, type StatusExibido } from '../lib/status'
 export function Simbolo({ className = 'h-7 w-7' }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-      <rect x="1" y="1" width="30" height="30" rx="7" fill="#17263e" />
-      <rect x="4" y="4" width="24" height="24" rx="4" fill="none" stroke="#faf8f3" strokeWidth="1.2" strokeDasharray="2.4 1.6" />
+      <rect x="1" y="1" width="30" height="30" rx="3" className="fill-slate-900" />
+      <rect x="4" y="4" width="24" height="24" rx="1.5" fill="none" className="stroke-slate-50" strokeWidth="1.2" strokeDasharray="2.4 1.6" />
       <path d="M9.5 16.5l4.2 4.2L22.5 11" fill="none" stroke="#ffd60a" strokeWidth="3.2" strokeLinecap="square" />
     </svg>
   )

@@ -12,26 +12,26 @@ const destinoSeguro = (v: string | null) => (v && v.startsWith('/') && !v.starts
 
 function Moldura({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-screen bg-superficie lg:grid-cols-[1fr_0.9fr]">
-      <div className="flex flex-col px-6 py-7 sm:px-12">
+    <div className="grid min-h-screen bg-fundo lg:grid-cols-2">
+      <div className="flex flex-col px-6 py-8 sm:px-12">
         <div className="flex items-center justify-between">
           <Marca />
           <AlternarTema compacto />
         </div>
-        <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-12">{children}</main>
-        <p className="text-center text-xs text-slate-500"><Link to="/" className="inline-flex min-h-10 items-center gap-1.5 hover:text-marca-600"><Icone nome="voltar" className="h-3.5 w-3.5" />Voltar ao site</Link></p>
+        <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-10">{children}</main>
       </div>
-      <aside className="hidden border-l border-slate-200 bg-marca-50 p-12 lg:flex lg:flex-col lg:justify-center">
-        <div className="mx-auto w-full max-w-sm">
-          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-superficie text-marca-600 shadow-sm"><Icone nome="documento" className="h-6 w-6" /></span>
-          <p className="mt-7 font-display text-4xl leading-tight font-semibold tracking-tight text-slate-900">Seu próximo trabalho começa com uma boa proposta.</p>
-          <p className="mt-4 text-base leading-relaxed text-slate-600">Organize os detalhes, apresente seu valor e acompanhe o que acontece depois do envio.</p>
-          <div className="mt-8 rounded-2xl border border-marca-200 bg-superficie p-6 shadow-sm">
-            <p className="text-sm font-semibold text-slate-900">Uma conta. Tudo organizado.</p>
-            <ul className="mt-5 space-y-4 text-sm text-slate-600">
-              {['Seus orçamentos e clientes na nuvem', 'Sua marca em cinco modelos de proposta', 'Aprovação pelo celular, sem conta para o cliente', 'Gratuito e sem cartão de crédito'].map((texto) => <li key={texto} className="flex items-start gap-3"><Icone nome="check" className="mt-0.5 h-4 w-4 shrink-0 text-marca-600" />{texto}</li>)}
-            </ul>
-          </div>
+      <aside className="papel-quadriculado hidden border-l border-slate-900 p-12 lg:flex lg:flex-col lg:justify-center">
+        <div className="mx-auto w-full max-w-md rounded-xl border border-slate-900 bg-superficie p-8 shadow-[6px_6px_0_0_var(--color-slate-900)]">
+          <p className="etiqueta">Por que criar conta</p>
+          <p className="mt-3 font-display text-4xl leading-none font-bold tracking-tight text-slate-900 uppercase">Enviado de manhã, <span className="grifo">aprovado</span> antes do almoço.</p>
+          <ul className="mt-8 space-y-2.5 text-sm text-slate-700">
+            {['Orçamentos salvos na nuvem, em todos os aparelhos', 'Link para o cliente aprovar pelo celular', 'Aviso assim que o cliente responder', 'Grátis, sem cartão'].map((t) => (
+              <li key={t} className="flex items-start gap-2.5">
+                <Icone nome="check" className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
+                {t}
+              </li>
+            ))}
+          </ul>
         </div>
       </aside>
     </div>
@@ -107,7 +107,7 @@ export function Entrar() {
         <div className="grid h-12 w-12 place-items-center rounded-xl border border-slate-200 text-slate-500">
           <Icone nome="email" className="h-7 w-7" />
         </div>
-        <h1 className="mt-6 font-display text-3xl font-semibold tracking-tight text-slate-900">Confira seu e-mail</h1>
+        <h1 className="mt-6 font-display text-4xl font-bold tracking-tight text-slate-900 uppercase">Confira seu e-mail</h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           {aviso === 'confirmar'
             ? <>Enviamos um link de confirmação para <strong>{email}</strong>. Abra o link para ativar sua conta e entrar.</>
@@ -145,8 +145,8 @@ export function Entrar() {
 
   return (
     <Moldura>
-      <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-900">{titulos[modo]}</h1>
-      <p className="mt-3 text-sm text-slate-500">
+      <h1 className="font-display text-4xl font-bold tracking-tight text-slate-900 uppercase">{titulos[modo]}</h1>
+      <p className="mt-1 text-sm text-slate-500">
         {modo === 'entrar' && <>Ainda não tem conta? <button className="font-semibold text-marca-600 hover:text-marca-700" onClick={() => setModo('cadastrar')}>Cadastre-se grátis</button></>}
         {modo === 'cadastrar' && <>Já tem conta? <button className="font-semibold text-marca-600 hover:text-marca-700" onClick={() => setModo('entrar')}>Entrar</button></>}
         {modo === 'recuperar' && 'Digite o e-mail da sua conta para receber o link de redefinição.'}

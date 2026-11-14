@@ -4,7 +4,7 @@
 
 @theme {
   --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'IBM Plex Sans Condensed', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-marca-50: #eef1fc;
   --color-marca-100: #dce2f9;
@@ -17,29 +17,29 @@
   --color-marca-800: #192d80;
   --color-marca-900: #172866;
   --color-marca-950: #0e183f;
-  --color-slate-50: #f7f9fc;
-  --color-slate-100: #eef2f7;
-  --color-slate-200: #e1e7ef;
-  --color-slate-300: #cbd5e1;
-  --color-slate-400: #8b9bb0;
-  --color-slate-500: #64748b;
-  --color-slate-600: #4b5d75;
-  --color-slate-700: #34455d;
-  --color-slate-800: #22324b;
-  --color-slate-900: #17263e;
-  --color-slate-950: #0b1528;
+  --color-slate-50: #faf8f3;
+  --color-slate-100: #f1ede4;
+  --color-slate-200: #e3ddd0;
+  --color-slate-300: #cfc7b6;
+  --color-slate-400: #a39a88;
+  --color-slate-500: #7a7262;
+  --color-slate-600: #5b5448;
+  --color-slate-700: #423d34;
+  --color-slate-800: #2b2822;
+  --color-slate-900: #161512;
+  --color-slate-950: #0b0a09;
   --color-destaque-200: #fff1a8;
   --color-destaque-300: #ffe45c;
   --color-destaque-400: #ffd60a;
   --color-destaque-500: #f2c200;
-  --color-superficie: #ffffff;
-  --color-fundo: #f7f9fc;
+  --color-superficie: #fffdf8;
+  --color-fundo: #f4f0e7;
   --spacing-68: 16.5rem;
   --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
 
   --animate-entrada: entrada 0.25s ease-out both;
   --animate-surgir: surgir 0.15s ease-out both;
@@ -71,17 +71,38 @@ html {
 
 body {
   background-color: var(--color-fundo);
+  /* textura de papel pontilhado, bem discreta */
+  background-image: radial-gradient(color-mix(in oklab, var(--color-slate-400) 55%, transparent) 1px, transparent 1.3px);
+  background-size: 22px 22px;
   color: var(--color-slate-900);
 }
 
 ::selection {
-  background: var(--color-marca-100);
-  color: var(--color-marca-900);
+  background: var(--color-destaque-300);
+  color: #161512;
 }
 
 :focus-visible {
   outline: 2px solid var(--color-marca-600);
   outline-offset: 2px;
+}
+
+/* Grifo de marca-texto atrás de uma palavra */
+.grifo {
+  background: linear-gradient(transparent 58%, var(--color-destaque-300) 58%, var(--color-destaque-300) 92%, transparent 92%);
+  padding: 0 0.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Papel quadriculado (fundo de seções) */
+.papel-quadriculado {
+  background-color: var(--color-fundo);
+  background-image:
+    linear-gradient(var(--color-slate-200) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-slate-200) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: -1px -1px;
 }
 
 .cascata > * {
@@ -101,22 +122,24 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors duration-150 select-none disabled:cursor-not-allowed disabled:opacity-50;
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border px-3.5 py-2 text-sm font-medium transition-colors duration-100 select-none disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 @layer components {
   .campo {
-    @apply min-h-10 w-full rounded-lg border border-slate-300 bg-superficie px-3 py-2 text-sm text-slate-900 transition-colors outline-none placeholder:text-slate-400 hover:border-slate-400 focus:border-marca-500 focus:shadow-[0_0_0_3px_var(--color-marca-100)] disabled:bg-slate-100 disabled:text-slate-500 aria-invalid:border-red-500;
+    @apply w-full rounded-md border border-slate-300 bg-superficie px-3 py-2 text-sm text-slate-900 transition-colors outline-none placeholder:text-slate-400 hover:border-slate-500 focus:border-slate-900 focus:shadow-[0_0_0_3px_var(--color-destaque-300)] disabled:bg-slate-100 disabled:text-slate-500 aria-invalid:border-red-500;
   }
   .rotulo {
     @apply mb-1.5 block text-[13px] font-medium text-slate-700;
   }
-  .btn-primario,
+  .btn-primario {
+    @apply btn border-slate-900 bg-slate-900 text-slate-50 hover:bg-slate-700;
+  }
   .btn-destaque {
-    @apply btn border-transparent bg-[#3159df] text-white shadow-sm hover:bg-[#2546bd];
+    @apply btn border-slate-900 bg-destaque-400 text-[#161512] hover:bg-destaque-300;
   }
   .btn-secundario {
-    @apply btn border-slate-200 bg-superficie text-slate-700 hover:border-slate-400 hover:bg-slate-50;
+    @apply btn border-slate-300 bg-superficie text-slate-800 hover:border-slate-900;
   }
   .btn-fantasma {
     @apply btn border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900;
@@ -125,38 +148,32 @@ body {
     @apply btn border-red-300 bg-superficie text-red-700 hover:border-red-600;
   }
   .cartao {
-    @apply rounded-xl border border-slate-200 bg-superficie shadow-sm;
+    @apply rounded-xl border border-slate-300/80 bg-superficie;
   }
   .cartao-interativo {
-    @apply rounded-xl border border-slate-200 bg-superficie shadow-sm transition-colors hover:border-marca-300;
+    @apply rounded-xl border border-slate-300/80 bg-superficie transition-colors hover:border-slate-900;
   }
   .etiqueta {
-    @apply text-xs font-semibold tracking-[0.06em] text-slate-500 uppercase;
-  }
-  .titulo-secao {
-    @apply font-display text-3xl leading-tight font-semibold tracking-tight text-slate-900 sm:text-[2.5rem];
+    @apply font-mono text-[11px] font-medium tracking-wider text-slate-500 uppercase;
   }
 }
 
-.abertura-site {
-  background: radial-gradient(ellipse at 85% 35%, var(--color-marca-100), transparent 58%);
-}
 
 /* ---------- Tema escuro: remapeia a paleta; o documento A4 continua sempre claro ---------- */
 .dark {
-  --color-superficie: #152135;
-  --color-fundo: #0d1728;
-  --color-slate-50: #19273c;
-  --color-slate-100: #1e2e44;
-  --color-slate-200: #2d3d54;
-  --color-slate-300: #465970;
-  --color-slate-400: #7b8fa8;
-  --color-slate-500: #9aacc2;
-  --color-slate-600: #b7c6d9;
-  --color-slate-700: #d2ddeb;
-  --color-slate-800: #e5edf8;
-  --color-slate-900: #f1f5fc;
-  --color-slate-950: #f8faff;
+  --color-superficie: #1b1a17;
+  --color-fundo: #121110;
+  --color-slate-50: #24221e;
+  --color-slate-100: #2b2924;
+  --color-slate-200: #38352f;
+  --color-slate-300: #5b5448;
+  --color-slate-400: #7a7262;
+  --color-slate-500: #a39a88;
+  --color-slate-600: #cfc7b6;
+  --color-slate-700: #e3ddd0;
+  --color-slate-800: #f1ede4;
+  --color-slate-900: #faf8f3;
+  --color-slate-950: #faf8f3;
   --color-marca-50: #1c2342;
   --color-marca-100: #222b52;
   --color-marca-200: #2f3c70;
