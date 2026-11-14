@@ -12,6 +12,7 @@ import { criarLink, estadoDoLink, listarLinks, revogarLink, urlDaProposta, type 
 import { formatarData, formatarDataHora, formatarMoeda, formatarNumero, nomeDoArquivo, telefoneWhatsApp } from '../../lib/formato'
 import { mensagemDeErro, nuvemDisponivel } from '../../lib/supabase'
 import { statusExibido } from '../../lib/status'
+import { recarregarPlano, usePlano } from '../../lib/plano'
 
 /** Abre a janela de impressão com o nome de arquivo organizado (o navegador usa o título como nome do PDF). */
 export function imprimirOrcamento(o: Pick<Orcamento, 'numero' | 'cliente' | 'uid'>, registrar = true) {
@@ -49,6 +50,8 @@ const ESTADO_LINK = {
 
 function PainelCompartilhar({ orc }: { orc: Orcamento }) {
   const { usuario } = useAuth()
+  const plano = usePlano()
+  const [noLimite, setNoLimite] = useState(false)
   const [links, setLinks] = useState<LinkProposta[] | null>(null)
   const [erro, setErro] = useState('')
   const [criando, setCriando] = useState(false)
@@ -100,10 +103,15 @@ function PainelCompartilhar({ orc }: { orc: Orcamento }) {
     }
     setCriando(true)
     try {
-      await criarLink(orc.id!, { validadeDias: validade ? Number(validade) : null, permitePdf })
+      await criarLink(orc.id!, { validadeDias: validade ? Number(validade) : null, permitePdf, selo: !plano.pro })
       avisar('Link criado! Agora é só enviar ao cliente.')
+      recarregarPlano()
       await carregar()
     } catch (e) {
+      if (e instanceof Error && e.message === 'LIMITE_PLANO') {
+        setNoLimite(true)
+        return
+      }
       avisar(e instanceof Error && !/fetch/i.test(e.message) ? e.message : mensagemDeErro(e), 'erro')
     } finally {
       setCriando(false)
@@ -174,9 +182,21 @@ function PainelCompartilhar({ orc }: { orc: Orcamento }) {
               Cliente pode baixar PDF
             </label>
           </div>
-          <button className="btn-primario w-full" disabled={criando} onClick={() => void gerar()}>
-            <Icone nome="link" /> {criando ? 'Salvando e gerando…' : 'Gerar link da proposta'}
-          </button>
+          {noLimite || (plano.limite != null && plano.linksNoMes >= plano.limite) ? (
+            <div className="border border-slate-900 bg-destaque-200 p-3 text-sm text-[#161512]">
+              Você usou os {plano.limite} links do plano grátis neste mês.{' '}
+              <Link to="/app/plano" className="font-semibold underline">Assine o Pro</Link> para links ilimitados.
+            </div>
+          ) : (
+            <button className="btn-primario w-full" disabled={criando} onClick={() => void gerar()}>
+              <Icone nome="link" /> {criando ? 'Salvando e gerando…' : 'Gerar link da proposta'}
+            </button>
+          )}
+          {plano.limite != null && (
+            <p className="font-mono text-[11px] text-slate-500">
+              {plano.linksNoMes} de {plano.limite} links usados neste mês · <Link to="/app/plano" className="underline">ver plano</Link>
+            </p>
+          )}
         </div>
       )}
 
@@ -272,6 +292,7 @@ export function VisualizarOrcamento() {
   const empresa = useLiveQuery(() => db.empresa.get('principal'))
   const [params, setParams] = useSearchParams()
   const jaImprimiu = useRef(false)
+  const plano = usePlano()
 
   // Vindo do botão "Exportar PDF" do painel: abre a impressão assim que o documento carregar
   useEffect(() => {
@@ -291,6 +312,7 @@ export function VisualizarOrcamento() {
     )
 
   const emp = normalizarEmpresa(empresa)
+  const selo = !plano.carregando && !plano.pro
 
   return (
     <>
@@ -327,7 +349,7 @@ export function VisualizarOrcamento() {
           </p>
           <div className="mx-auto max-w-[794px] overflow-hidden rounded-xl bg-slate-200/70 p-3">
             <PreviaA4>
-              <DocumentoOrcamento orcamento={orc} empresa={emp} />
+              <DocumentoOrcamento orcamento={orc} empresa={emp} selo={selo} />
             </PreviaA4>
           </div>
         </div>
@@ -339,7 +361,7 @@ export function VisualizarOrcamento() {
 
       {/* Impressão: folha em tamanho real */}
       <div className="area-impressao hidden print:block">
-        <DocumentoOrcamento orcamento={orc} empresa={emp} />
+        <DocumentoOrcamento orcamento={orc} empresa={emp} selo={selo} />
       </div>
     </>
   )

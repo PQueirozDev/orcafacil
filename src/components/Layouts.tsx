@@ -271,7 +271,7 @@ const LINKS_APP = [
   { para: '/app/clientes', rotulo: 'Clientes', icone: 'clientes' },
   { para: '/app/modelo', rotulo: 'Modelos', icone: 'modelos' },
   { para: '/app/configuracoes', rotulo: 'Empresa', icone: 'config' },
-  { para: '/app/conta', rotulo: 'Conta', icone: 'usuario' },
+  { para: '/app/plano', rotulo: 'Plano', icone: 'cartao' },
 ]
 
 export function LayoutApp() {

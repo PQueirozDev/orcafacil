@@ -44,6 +44,8 @@ const rotas = createBrowserRouter([
       { path: 'clientes', element: sobDemanda(() => import('./pages/app/Clientes'), 'Clientes') },
       { path: 'configuracoes', element: sobDemanda(() => import('./pages/app/Configuracoes'), 'Configuracoes') },
       { path: 'conta', element: sobDemanda(() => import('./pages/app/Conta'), 'Conta') },
+      { path: 'plano', element: sobDemanda(() => import('./pages/app/Plano'), 'Plano') },
+      { path: 'planos', element: <Navigate to="/app/plano" replace /> },
       { path: 'assinatura', element: <Navigate to="/app/conta" replace /> },
     ],
   },

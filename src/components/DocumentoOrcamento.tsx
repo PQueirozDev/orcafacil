@@ -40,7 +40,7 @@ const FONTES = {
  * para não haver diferença entre o que se vê e o que é exportado.
  * Os tamanhos de texto são em "em", relativos ao tamanho de fonte do modelo.
  */
-export function DocumentoOrcamento({ orcamento: o, empresa: e }: { orcamento: OrcamentoDoc; empresa: EmpresaDoc }) {
+export function DocumentoOrcamento({ orcamento: o, empresa: e, selo = false }: { orcamento: OrcamentoDoc; empresa: EmpresaDoc; selo?: boolean }) {
   const l = layoutDe(e)
   const cor = e.corTema || '#4f46e5'
   const r = l.cantos === 'arredondados'
@@ -318,6 +318,9 @@ export function DocumentoOrcamento({ orcamento: o, empresa: e }: { orcamento: Or
         <footer className="evitar-quebra mt-[2em] border-t border-slate-200 pt-[0.8em] text-center text-[0.76em] whitespace-pre-line opacity-60">
           {e.rodape}
         </footer>
+      )}
+      {selo && (
+        <p className="mt-[2em] text-center text-[0.7em] text-slate-400">Feito com OrçaFácil · orcafacil.pqueirozdev.com.br</p>
       )}
     </article>
   )

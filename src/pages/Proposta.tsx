@@ -135,7 +135,7 @@ export function Proposta() {
           <div className="order-2 min-w-0 lg:order-1">
             <div className="overflow-hidden rounded-xl bg-slate-200/70 p-2 sm:p-3">
               <PreviaA4>
-                <DocumentoOrcamento orcamento={o} empresa={e} />
+                <DocumentoOrcamento orcamento={o} empresa={e} selo={dados.snapshot.selo !== false} />
               </PreviaA4>
             </div>
           </div>
@@ -243,13 +243,15 @@ export function Proposta() {
             )}
           </aside>
         </div>
-        <p className="mt-10 text-center text-xs text-slate-400">
-          Proposta criada com <Link to="/" className="font-semibold hover:text-slate-600">OrçaFácil</Link>
-        </p>
+        {dados.snapshot.selo !== false && (
+          <p className="mt-10 text-center text-xs text-slate-400">
+            Proposta criada com <Link to="/" className="font-semibold hover:text-slate-600">OrçaFácil</Link>
+          </p>
+        )}
       </main>
 
       <div className="area-impressao hidden print:block">
-        <DocumentoOrcamento orcamento={o} empresa={e} />
+        <DocumentoOrcamento orcamento={o} empresa={e} selo={dados.snapshot.selo !== false} />
       </div>
     </div>
   )
