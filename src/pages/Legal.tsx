@@ -24,7 +24,7 @@ export function Privacidade() {
   return (
     <PaginaLegal
       titulo="Política de privacidade"
-      resumo="Resumo: sem conta, seus dados ficam só no seu navegador. Com conta, eles são guardados no nosso banco de dados (Supabase) e cada conta só acessa os próprios dados. Não vendemos dados, não usamos anúncios nem rastreadores."
+      resumo="Resumo: seus dados ficam no nosso banco de dados (Supabase), com uma cópia no seu aparelho para funcionar offline. Cada conta só acessa os próprios dados. Não vendemos dados, não usamos anúncios nem rastreadores."
     >
       <section>
         <h2>1. Quem somos</h2>
@@ -34,14 +34,14 @@ export function Privacidade() {
         </p>
       </section>
       <section>
-        <h2>2. Uso sem conta (modo visitante)</h2>
+        <h2>2. Cópia no seu aparelho</h2>
         <ul>
-          <li>Empresa, clientes, orçamentos e fotos ficam no armazenamento local do seu navegador (IndexedDB) e não são enviados para nós.</li>
-          <li>Se você limpar os dados do site, trocar de navegador ou usar janela anônima, as informações não estarão lá. Use o backup em “Empresa”.</li>
+          <li>Para funcionar sem internet, o app guarda uma cópia dos seus dados no navegador (IndexedDB), separada por conta, e sincroniza com a nuvem quando há conexão.</li>
+          <li>Dados de uso sem conta, de versões anteriores do app, continuam só no navegador até você trazê-los para a conta em “Conta”.</li>
         </ul>
       </section>
       <section>
-        <h2>3. Uso com conta</h2>
+        <h2>3. Dados da conta</h2>
         <ul>
           <li><strong>Dados da conta:</strong> nome, e-mail e senha (a senha é guardada pelo serviço de autenticação de forma criptografada; nós não temos acesso a ela).</li>
           <li><strong>Dados que você cadastra:</strong> dados da empresa, clientes (nome, documento, contato, endereço, observações), orçamentos, fotos e logotipo.</li>

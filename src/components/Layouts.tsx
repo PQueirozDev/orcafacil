@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { sair, useAuth } from '../auth'
 import { db } from '../db'
 import { formatarDataHora } from '../lib/formato'
@@ -228,7 +228,7 @@ function Rodape() {
         <div className="sm:col-span-2">
           <Marca />
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
-            Orçamentos profissionais com fotos, sua marca e aprovação online. Grátis para começar, sem cartão.
+            Orçamentos profissionais com fotos, sua marca e aprovação online. Grátis, sem cartão.
           </p>
         </div>
         <nav aria-label="Produto" className="text-sm">
@@ -237,7 +237,7 @@ function Rodape() {
             <li><a href="/#recursos" className="hover:text-slate-900">Recursos</a></li>
             <li><a href="/#modelos" className="hover:text-slate-900">Modelos</a></li>
             <li><Link to="/planos" className="hover:text-slate-900">Planos</Link></li>
-            <li><Link to="/app" className="hover:text-slate-900">Criar orçamento</Link></li>
+            <li><Link to="/entrar?modo=cadastrar" className="hover:text-slate-900">Criar conta</Link></li>
           </ul>
         </nav>
         <nav aria-label="Legal" className="text-sm">
@@ -294,6 +294,9 @@ export function LayoutApp() {
 
   if (carregando) {
     return <div className="grid min-h-screen place-items-center bg-fundo text-sm text-slate-500">Carregando…</div>
+  }
+  if (nuvemDisponivel && !usuario) {
+    return <Navigate to={`/entrar?voltar=${encodeURIComponent(local.pathname + local.search)}`} replace />
   }
 
   const nav = (

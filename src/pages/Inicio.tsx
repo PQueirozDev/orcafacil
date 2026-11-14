@@ -24,7 +24,7 @@ const RECURSOS = [
 ]
 
 const PERGUNTAS = [
-  ['Preciso criar conta para usar?', 'Não. Você cria e exporta orçamentos sem cadastro, e eles ficam salvos no seu navegador. A conta grátis libera a nuvem, o link de aprovação e os avisos.'],
+  ['Preciso criar conta?', 'Sim, uma conta grátis com e-mail (ou Google). Assim seus orçamentos ficam salvos na nuvem, aparecem em todos os seus aparelhos e você pode enviar links de aprovação.'],
   ['Como o cliente aprova?', 'Você envia um link pelo WhatsApp ou e-mail. Ele abre no navegador, confere os itens e toca em aprovar ou recusar, informando o nome. Não precisa instalar nada.'],
   ['O aceite tem validade jurídica?', 'É um aceite eletrônico simples: registra nome, data e horário. Não substitui assinatura digital certificada (ICP-Brasil) quando ela for exigida.'],
   ['E se eu mudar o orçamento depois de enviar?', 'O link mostra uma cópia fixa do que foi enviado, para o cliente aprovar exatamente aquilo. Se mudar algo, gere um novo link.'],
@@ -48,14 +48,14 @@ export function Inicio() {
             Organize seus clientes, personalize propostas e acompanhe aprovações em um só lugar.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link to="/app" className="btn-primario px-5 py-2.5 text-[15px]">
-              Criar orçamento grátis
+            <Link to="/entrar?modo=cadastrar" className="btn-primario px-5 py-2.5 text-[15px]">
+              Criar conta grátis
             </Link>
             <a href="#recursos" className="btn-secundario px-5 py-2.5 text-[15px]">
               Conhecer funcionalidades
             </a>
           </div>
-          <p className="mt-4 text-sm text-slate-500">Sem cadastro e sem cartão. Crie uma conta só quando quiser salvar na nuvem.</p>
+          <p className="mt-4 text-sm text-slate-500">Grátis e sem cartão. Entre com e-mail ou com sua conta Google.</p>
         </div>
       </section>
 
@@ -169,8 +169,8 @@ export function Inicio() {
             <br />
             em cinco minutos.
           </h2>
-          <Link to="/app" className="btn shrink-0 bg-slate-50 px-5 py-2.5 text-[15px] text-slate-900 hover:bg-slate-200">
-            Criar orçamento grátis <Icone nome="seta" />
+          <Link to="/entrar?modo=cadastrar" className="btn shrink-0 bg-slate-50 px-5 py-2.5 text-[15px] text-slate-900 hover:bg-slate-200">
+            Criar conta grátis <Icone nome="seta" />
           </Link>
         </div>
       </section>

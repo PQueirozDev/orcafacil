@@ -65,7 +65,7 @@ export function Entrar() {
     return (
       <Moldura>
         <h1 className="text-2xl font-semibold text-slate-900">Contas indisponíveis</h1>
-        <p className="mt-2 text-sm text-slate-500">Este ambiente não está conectado à nuvem. Você pode usar o app normalmente no modo visitante.</p>
+        <p className="mt-2 text-sm text-slate-500">Este ambiente não está conectado à nuvem (modo de desenvolvimento). O app funciona só neste navegador.</p>
         <Link to="/app" className="btn-primario mt-6">Abrir o app</Link>
       </Moldura>
     )
@@ -218,13 +218,6 @@ export function Entrar() {
         )}
       </form>
 
-      <div className="mt-8 border-t border-slate-200 pt-6 text-sm text-slate-600">
-        Prefere não criar conta agora?{' '}
-        <Link to="/app" className="font-semibold text-marca-600 hover:text-marca-700">
-          Use sem cadastro
-        </Link>
-        : seus orçamentos ficam salvos neste navegador.
-      </div>
     </Moldura>
   )
 }
