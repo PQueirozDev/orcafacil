@@ -107,7 +107,8 @@ export function Termos() {
         <h2>1. Sobre o serviço</h2>
         <p>
           O OrçaFácil permite criar orçamentos com itens, fotos e cálculo automático, gerar PDF, compartilhar propostas por link e
-          receber aprovações. Pode ser usado sem conta (dados no navegador) ou com conta (dados na nuvem).
+          receber aprovações. Para criar e gerenciar orçamentos é necessário entrar em uma conta gratuita. O cliente pode abrir e
+          responder a uma proposta pelo link sem criar conta.
         </p>
       </section>
       <section>
@@ -132,7 +133,8 @@ export function Termos() {
           <Link className="font-semibold text-marca-600 hover:text-marca-700" to="/privacidade">
             Política de privacidade
           </Link>
-          ). No modo sem conta, exporte backups com frequência: não é possível recuperar dados apagados do navegador.
+          . Exporte backups com frequência. Dados de versões anteriores criados sem conta continuam apenas no navegador até
+          serem importados para sua conta e não podem ser recuperados se forem apagados do aparelho.
         </p>
       </section>
       <section>

@@ -9,9 +9,8 @@ Plataforma para criar, enviar e aprovar orçamentos comerciais. Feita para freel
 - **Editor com prévia em tempo real**: cliente, itens com foto, quantidade, unidade, preço, desconto (% ou R$), impostos opcionais, frete, prazo, validade, condições, observações e termos. Duplicar, reordenar e remover itens, desfazer/refazer (Ctrl+Z / Ctrl+Shift+Z), validação e salvamento automático. No celular, alternador entre "Editar" e "Visualizar".
 - **Cinco modelos visuais** (Moderno, Clássico, Criativo, Técnico, Comercial), personalizáveis: logo, cor principal e secundária, fonte, tamanhos, ordem e visibilidade das seções, estilo de cabeçalho e tabela, rodapé e dados de pagamento.
 - **PDF em A4** pela impressão do navegador, com a mesma marcação da prévia, cabeçalho da tabela repetido em cada página, numeração "Página X de Y" e nome de arquivo organizado (`Orcamento-0124-Cliente.pdf`).
-- **Modo visitante**: funciona sem conta, com os dados salvos no navegador (IndexedDB) e backup em `.json`.
-- **Conta grátis (Supabase Auth)**: cadastro, login, confirmação de e-mail, recuperação e redefinição de senha, login com Google opcional.
-- **Sincronização com a nuvem**: os dados ficam no aparelho e são replicados no Supabase. Funciona offline e envia quando a conexão volta. Os dados do modo visitante podem ser trazidos para a conta.
+- **Conta grátis obrigatória (Supabase Auth)**: cadastro, login, confirmação de e-mail, recuperação e redefinição de senha, login com Google quando o provedor estiver configurado. O uso do app é gratuito, sem plano pago nem limite de links por plano.
+- **Sincronização com a nuvem**: os dados ficam no aparelho (IndexedDB) e são replicados no Supabase. Funciona offline após entrar e envia quando a conexão volta. Dados criados sem conta em versões anteriores podem ser trazidos para a conta. Backup em `.json` disponível.
 - **Links de proposta**: token aleatório de 256 bits, cópia imutável (snapshot) do que foi enviado, validade opcional, revogação, envio por WhatsApp, e-mail ou cópia do link.
 - **Portal do cliente** (`/proposta/TOKEN`): o cliente vê a proposta, baixa o PDF (se permitido) e aprova ou recusa uma única vez, com nome e comentário opcional. É um aceite eletrônico simples, não uma assinatura digital certificada.
 - **Status e histórico**: rascunho, pendente, visualizado, aprovado, recusado, expirado (derivado da validade) e cancelado, com transições controladas e linha do tempo de eventos.
@@ -33,7 +32,7 @@ cp .env.example .env.local   # preencha com os dados do seu projeto Supabase
 npm run dev                  # http://localhost:5173
 ```
 
-Sem as variáveis do Supabase o app funciona normalmente no modo visitante (sem contas, nuvem e links).
+Configure as variáveis do Supabase para reproduzir o funcionamento de produção, que exige login. Sem elas, apenas o modo visitante local fica disponível para desenvolvimento, sem contas, nuvem ou links de proposta.
 
 ### Variáveis de ambiente
 
@@ -41,7 +40,7 @@ Sem as variáveis do Supabase o app funciona normalmente no modo visitante (sem 
 |---|---|
 | `VITE_SUPABASE_URL` | URL do projeto (`https://xxxx.supabase.co`) |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Chave **publicável** (`sb_publishable_...`). É pública por definição: a segurança vem das políticas RLS. |
-| `VITE_LOGIN_GOOGLE` | `true` para mostrar "Continuar com Google" (exige configurar o provedor) |
+| `VITE_LOGIN_GOOGLE` | Opcional: `true` força a exibição de "Continuar com Google". Por padrão, o app consulta os provedores ativos no Supabase e só mostra o botão quando Google estiver configurado. |
 
 Nunca coloque a *service role key* ou a senha do banco no frontend nem no repositório.
 
@@ -53,7 +52,7 @@ Nunca coloque a *service role key* ou a senha do banco no frontend nem no reposi
    - **Site URL**: a URL de produção (ex.: `https://orcafacil.pqueirozdev.com.br`).
    - **Redirect URLs**: a URL de produção, as URLs de preview da Vercel (`https://*-SEU-TIME.vercel.app/**`) e `http://localhost:5173/**`.
 4. (Recomendado) Em **Authentication → Emails → SMTP**, configure um provedor próprio. O envio padrão do Supabase tem limite baixo por hora e serve só para testes.
-5. (Opcional) Habilite o provedor Google e defina `VITE_LOGIN_GOOGLE=true`.
+5. (Opcional) Configure um cliente OAuth do Google com a URI de redirecionamento `https://SEU-PROJETO.supabase.co/auth/v1/callback` e habilite o provedor Google no Supabase. O botão aparece automaticamente depois da configuração; não coloque o Client Secret em variáveis `VITE_*`.
 
 ### Estrutura do banco
 
@@ -93,6 +92,8 @@ E2E_BASE=http://localhost:5173 E2E_EMAIL=teste@exemplo.com E2E_SENHA=... npm run
 ## Deploy (Vercel)
 
 O repositório está ligado ao projeto `orcafacil` na Vercel: push na `main` publica em produção e outras branches geram previews. Cadastre as variáveis `VITE_SUPABASE_*` em **Settings → Environment Variables** (Production e Preview). O `vercel.json` cuida das rotas da SPA, do cache, dos cabeçalhos de segurança e do `noindex` nas páginas privadas.
+
+As variáveis `VITE_*` são incorporadas ao JavaScript durante o build. Depois de trocar o projeto Supabase nas variáveis da Vercel, publique um novo build de produção; alterar apenas as variáveis não atualiza o site já publicado.
 
 ## Limitações conhecidas
 
