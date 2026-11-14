@@ -186,14 +186,14 @@ export function LayoutPublico() {
       <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:bg-superficie focus:px-4 focus:py-2">
         Pular para o conteúdo
       </a>
-      <header className="sticky top-0 z-30 border-b border-slate-900 bg-fundo">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-superficie/95 backdrop-blur-md">
+        <div className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between gap-2 px-5 sm:px-6">
           <Marca />
-          <nav aria-label="Principal" className="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
+          <nav aria-label="Principal" className="hidden items-center gap-6 text-sm font-medium text-slate-700 lg:flex">
             <a href="/#como-funciona" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Como funciona</a>
             <a href="/#modelos" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Modelos</a>
             <a href="/#recursos" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Recursos</a>
-            <Link to="/planos" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Planos</Link>
+            <Link to="/planos" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Gratuito</Link>
           </nav>
           <div className="flex items-center gap-1.5">
             <AlternarTema compacto />
@@ -201,8 +201,8 @@ export function LayoutPublico() {
               <Link to="/app" className="btn-primario">Abrir o app</Link>
             ) : nuvemDisponivel ? (
               <>
-                <Link to="/entrar" className="btn-fantasma hidden px-3 sm:inline-flex">Entrar</Link>
-                <Link to="/entrar?modo=cadastrar" className="btn-destaque">Criar conta</Link>
+                <Link to="/entrar" className="btn-fantasma px-2.5 sm:px-3">Entrar</Link>
+                <Link to="/entrar?modo=cadastrar" className="btn-destaque hidden sm:inline-flex">Criar conta grátis</Link>
               </>
             ) : (
               <Link to="/app" className="btn-primario">Abrir o app</Link>
@@ -220,7 +220,7 @@ export function LayoutPublico() {
 
 function Rodape() {
   return (
-    <footer className="border-t border-slate-900 bg-fundo">
+    <footer className="border-t border-slate-200 bg-superficie">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2">
           <Marca />
@@ -231,7 +231,7 @@ function Rodape() {
           <ul className="mt-3 space-y-2 text-slate-700">
             <li><a href="/#como-funciona" className="hover:underline">Como funciona</a></li>
             <li><a href="/#modelos" className="hover:underline">Modelos</a></li>
-            <li><Link to="/planos" className="hover:underline">Planos</Link></li>
+            <li><Link to="/planos" className="hover:underline">Conta gratuita</Link></li>
             <li><Link to="/entrar?modo=cadastrar" className="hover:underline">Criar conta</Link></li>
           </ul>
         </nav>
@@ -249,7 +249,7 @@ function Rodape() {
         </nav>
       </div>
       <div className="border-t border-slate-300">
-        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-2 px-4 py-4 font-mono text-xs text-slate-500 sm:flex-row">
+        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row">
           <p>© {new Date().getFullYear()} OrçaFácil</p>
           <p>
             Feito por{' '}
@@ -290,14 +290,14 @@ export function LayoutApp() {
   }
 
   return (
-    <div className="min-h-screen bg-fundo pb-16 md:pb-0 print:bg-white print:pb-0">
+    <div className="min-h-screen bg-fundo pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 print:bg-white print:pb-0">
       <a href="#conteudo-app" className="nao-imprimir sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:bg-superficie focus:px-4 focus:py-2">
         Pular para o conteúdo
       </a>
 
       {/* Barra superior */}
-      <header className="nao-imprimir sticky top-0 z-30 border-b border-slate-900 bg-fundo">
-        <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4 sm:px-6">
+      <header className="nao-imprimir sticky top-0 z-30 border-b border-slate-200 bg-superficie/95 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
           <Marca para="/app" />
           <nav aria-label="Aplicativo" className="hidden h-full items-stretch gap-1 md:flex">
             {LINKS_APP.map((l) => (
@@ -307,7 +307,7 @@ export function LayoutApp() {
                 end={l.fim}
                 className={({ isActive }) =>
                   `flex items-center border-b-2 px-2.5 text-sm font-medium transition-colors ${
-                    isActive ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'
+                    isActive ? 'border-marca-500 text-marca-600' : 'border-transparent text-slate-500 hover:text-slate-900'
                   }`
                 }
               >
@@ -353,14 +353,14 @@ export function LayoutApp() {
       </footer>
 
       {/* Navegação inferior (celular) */}
-      <nav aria-label="Aplicativo" className="nao-imprimir fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-slate-900 bg-fundo md:hidden">
+      <nav aria-label="Aplicativo" className="nao-imprimir fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-slate-200 bg-superficie pb-[env(safe-area-inset-bottom)] md:hidden">
         {LINKS_APP.map((l) => (
           <NavLink
             key={l.para}
             to={l.para}
             end={l.fim}
             className={({ isActive }) =>
-              `mx-1 my-1 flex flex-col items-center gap-0.5 rounded-lg py-1.5 text-[11px] font-medium ${isActive ? 'bg-destaque-300 text-[#161512]' : 'text-slate-500'}`
+              `mx-1 my-1 flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 text-[11px] font-medium ${isActive ? 'bg-marca-50 text-marca-600' : 'text-slate-500'}`
             }
           >
             <Icone nome={l.icone} className="h-5 w-5" />
