@@ -21,3 +21,24 @@ export function lerNumero(texto: string): number {
   const n = Number(normalizado)
   return Number.isFinite(n) ? n : 0
 }
+
+const dataHora = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+export const formatarDataHora = (ms: number) => dataHora.format(new Date(ms))
+
+/** Nome de arquivo seguro: "Orcamento-0124-Maria-Souza" (sem acentos nem símbolos). */
+export function nomeDoArquivo(numero: number, cliente: string) {
+  const limpo = cliente
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40)
+  return `Orcamento-${String(numero).padStart(4, '0')}${limpo ? `-${limpo}` : ''}`
+}
+
+/** Só dígitos, para links do WhatsApp (adiciona 55 a números brasileiros sem DDI). */
+export function telefoneWhatsApp(telefone: string) {
+  const d = telefone.replace(/\D/g, '')
+  if (!d) return ''
+  return d.length <= 11 ? `55${d}` : d
+}

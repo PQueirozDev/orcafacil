@@ -1,46 +1,50 @@
-import { StrictMode } from 'react'
+import { lazy, StrictMode, Suspense, type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import './index.css'
+import './lib/tema'
 import { Avisos } from './components/Avisos'
 import { LayoutApp, LayoutPublico } from './components/Layouts'
-import { Checkout } from './pages/Checkout'
-import { Entrar } from './pages/Entrar'
+import { Carregando } from './components/ui'
 import { Inicio } from './pages/Inicio'
-import { NaoEncontrada, Privacidade, Termos } from './pages/Legal'
-import { Precos } from './pages/Precos'
-import { Assinatura } from './pages/app/Assinatura'
-import { Clientes } from './pages/app/Clientes'
-import { Configuracoes } from './pages/app/Configuracoes'
-import { EditorOrcamento } from './pages/app/EditorOrcamento'
-import { ModeloOrcamento } from './pages/app/ModeloOrcamento'
-import { Painel } from './pages/app/Painel'
-import { VisualizarOrcamento } from './pages/app/VisualizarOrcamento'
+
+/** Carrega a página só quando ela é aberta (divide o código por rota). */
+function sobDemanda<K extends string>(carregar: () => Promise<Record<K, ComponentType>>, nome: K) {
+  const Pagina = lazy(() => carregar().then((m) => ({ default: m[nome] as ComponentType })))
+  return (
+    <Suspense fallback={<Carregando />}>
+      <Pagina />
+    </Suspense>
+  )
+}
 
 const rotas = createBrowserRouter([
   {
     element: <LayoutPublico />,
     children: [
       { path: '/', element: <Inicio /> },
-      { path: '/precos', element: <Precos /> },
-      { path: '/termos', element: <Termos /> },
-      { path: '/privacidade', element: <Privacidade /> },
-      { path: '*', element: <NaoEncontrada /> },
+      { path: '/planos', element: sobDemanda(() => import('./pages/Planos'), 'Planos') },
+      { path: '/precos', element: <Navigate to="/planos" replace /> },
+      { path: '/termos', element: sobDemanda(() => import('./pages/Legal'), 'Termos') },
+      { path: '/privacidade', element: sobDemanda(() => import('./pages/Legal'), 'Privacidade') },
+      { path: '*', element: sobDemanda(() => import('./pages/Legal'), 'NaoEncontrada') },
     ],
   },
-  { path: '/entrar', element: <Entrar /> },
-  { path: '/checkout/:plano', element: <Checkout /> },
+  { path: '/entrar', element: sobDemanda(() => import('./pages/Entrar'), 'Entrar') },
+  { path: '/redefinir-senha', element: sobDemanda(() => import('./pages/Entrar'), 'RedefinirSenha') },
+  { path: '/proposta/:token', element: sobDemanda(() => import('./pages/Proposta'), 'Proposta') },
   {
     path: '/app',
     element: <LayoutApp />,
     children: [
-      { index: true, element: <Painel /> },
-      { path: 'orcamentos/:id', element: <EditorOrcamento /> },
-      { path: 'orcamentos/:id/visualizar', element: <VisualizarOrcamento /> },
-      { path: 'modelo', element: <ModeloOrcamento /> },
-      { path: 'clientes', element: <Clientes /> },
-      { path: 'configuracoes', element: <Configuracoes /> },
-      { path: 'assinatura', element: <Assinatura /> },
+      { index: true, element: sobDemanda(() => import('./pages/app/Painel'), 'Painel') },
+      { path: 'orcamentos/:id', element: sobDemanda(() => import('./pages/app/EditorOrcamento'), 'EditorOrcamento') },
+      { path: 'orcamentos/:id/visualizar', element: sobDemanda(() => import('./pages/app/VisualizarOrcamento'), 'VisualizarOrcamento') },
+      { path: 'modelo', element: sobDemanda(() => import('./pages/app/ModeloOrcamento'), 'ModeloOrcamento') },
+      { path: 'clientes', element: sobDemanda(() => import('./pages/app/Clientes'), 'Clientes') },
+      { path: 'configuracoes', element: sobDemanda(() => import('./pages/app/Configuracoes'), 'Configuracoes') },
+      { path: 'conta', element: sobDemanda(() => import('./pages/app/Conta'), 'Conta') },
+      { path: 'assinatura', element: <Navigate to="/app/conta" replace /> },
     ],
   },
 ])

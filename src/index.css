@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --color-marca-50: #eef2ff;
@@ -11,6 +13,10 @@
   --color-marca-800: #3730a3;
   --color-marca-900: #312e81;
   --color-violeta-600: #7c3aed;
+  --color-superficie: #ffffff;
+  --color-fundo: #f6f7fb;
+  --color-marca-300: #a5b4fc;
+  --color-marca-400: #818cf8;
   --spacing-68: 17rem;
 
   --animate-entrada: entrada 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -46,14 +52,6 @@
       transform: none;
     }
   }
-  @keyframes deslizar {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: none;
-    }
-  }
   @keyframes flutuar {
     0%,
     100% {
@@ -71,8 +69,8 @@ html {
 }
 
 body {
-  background: #f6f7fb;
-  color: #0f172a;
+  background: var(--color-fundo);
+  color: var(--color-slate-900);
 }
 
 ::selection {
@@ -104,7 +102,7 @@ body {
 @layer components {
 /* Campos de formulário padrão */
 .campo {
-  @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-xs outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-marca-500 focus:ring-4 focus:ring-marca-100;
+  @apply w-full rounded-xl border border-slate-200 bg-superficie px-3.5 py-2.5 text-sm text-slate-900 shadow-xs outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-marca-500 focus:ring-4 focus:ring-marca-100;
 }
 
 .rotulo {
@@ -115,23 +113,121 @@ body {
   @apply btn bg-gradient-to-b from-marca-500 to-marca-600 text-white shadow-md shadow-marca-600/25 ring-1 ring-inset ring-white/10 hover:from-marca-600 hover:to-marca-700 hover:shadow-lg hover:shadow-marca-600/30;
 }
 .btn-secundario {
-  @apply btn border border-slate-200 bg-white text-slate-700 shadow-xs hover:border-slate-300 hover:bg-slate-50;
+  @apply btn border border-slate-200 bg-superficie text-slate-700 shadow-xs hover:border-slate-300 hover:bg-slate-50;
 }
 .btn-fantasma {
   @apply btn text-slate-600 hover:bg-slate-100 hover:text-slate-900;
 }
 .btn-perigo {
-  @apply btn border border-red-200 bg-white text-red-600 hover:border-red-300 hover:bg-red-50;
+  @apply btn border border-red-200 bg-superficie text-red-600 hover:border-red-300 hover:bg-red-50;
 }
 
 .cartao {
-  @apply rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)];
+  @apply rounded-2xl border border-slate-200/80 bg-superficie shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)];
 }
 
 /* Cartão que reage ao passar o mouse */
 .cartao-interativo {
-  @apply rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-marca-200 hover:shadow-[0_12px_32px_-12px_rgba(79,70,229,0.25)];
+  @apply rounded-2xl border border-slate-200/80 bg-superficie shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-marca-200 hover:shadow-[0_12px_32px_-12px_rgba(79,70,229,0.25)];
 }
+}
+
+
+/* ---------- Tema escuro: remapeia a paleta; o documento A4 continua sempre claro ---------- */
+.dark {
+  --color-superficie: oklch(21% 0.03 266);
+  --color-fundo: oklch(15.5% 0.028 266);
+  --color-slate-50: oklch(25.5% 0.032 264);
+  --color-slate-100: oklch(28.5% 0.034 264);
+  --color-slate-200: oklch(33% 0.035 262);
+  --color-slate-300: oklch(44.6% 0.043 257.281);
+  --color-slate-400: oklch(55.4% 0.046 257.417);
+  --color-slate-500: oklch(70.4% 0.04 256.788);
+  --color-slate-600: oklch(86.9% 0.022 252.894);
+  --color-slate-700: oklch(92.9% 0.013 255.508);
+  --color-slate-800: oklch(96.8% 0.007 247.896);
+  --color-slate-900: oklch(98.4% 0.003 247.858);
+  --color-slate-950: oklch(98.4% 0.003 247.858);
+  --color-marca-50: oklch(27% 0.07 277);
+  --color-marca-100: oklch(32% 0.09 277);
+  --color-marca-200: oklch(40% 0.12 277);
+  --color-marca-700: #a5b4fc;
+  --color-marca-800: #c7d2fe;
+  --color-marca-900: #e0e7ff;
+  --color-emerald-50: color-mix(in oklch, oklch(69.6% 0.17 162.48) 14%, oklch(21% 0.03 266));
+  --color-emerald-100: color-mix(in oklch, oklch(69.6% 0.17 162.48) 22%, oklch(21% 0.03 266));
+  --color-emerald-200: color-mix(in oklch, oklch(69.6% 0.17 162.48) 38%, oklch(21% 0.03 266));
+  --color-emerald-700: oklch(84.5% 0.143 164.978);
+  --color-emerald-800: oklch(90.5% 0.093 164.15);
+  --color-sky-50: color-mix(in oklch, oklch(68.5% 0.169 237.323) 14%, oklch(21% 0.03 266));
+  --color-sky-100: color-mix(in oklch, oklch(68.5% 0.169 237.323) 22%, oklch(21% 0.03 266));
+  --color-sky-200: color-mix(in oklch, oklch(68.5% 0.169 237.323) 38%, oklch(21% 0.03 266));
+  --color-sky-700: oklch(82.8% 0.111 230.318);
+  --color-sky-800: oklch(90.1% 0.058 230.902);
+  --color-rose-50: color-mix(in oklch, oklch(64.5% 0.246 16.439) 14%, oklch(21% 0.03 266));
+  --color-rose-100: color-mix(in oklch, oklch(64.5% 0.246 16.439) 22%, oklch(21% 0.03 266));
+  --color-rose-200: color-mix(in oklch, oklch(64.5% 0.246 16.439) 38%, oklch(21% 0.03 266));
+  --color-rose-700: oklch(81% 0.117 11.638);
+  --color-rose-800: oklch(89.2% 0.058 10.001);
+  --color-red-50: color-mix(in oklch, oklch(63.7% 0.237 25.331) 14%, oklch(21% 0.03 266));
+  --color-red-100: color-mix(in oklch, oklch(63.7% 0.237 25.331) 22%, oklch(21% 0.03 266));
+  --color-red-200: color-mix(in oklch, oklch(63.7% 0.237 25.331) 38%, oklch(21% 0.03 266));
+  --color-red-700: oklch(80.8% 0.114 19.571);
+  --color-red-800: oklch(88.5% 0.062 18.334);
+  --color-amber-50: color-mix(in oklch, oklch(76.9% 0.188 70.08) 14%, oklch(21% 0.03 266));
+  --color-amber-100: color-mix(in oklch, oklch(76.9% 0.188 70.08) 22%, oklch(21% 0.03 266));
+  --color-amber-200: color-mix(in oklch, oklch(76.9% 0.188 70.08) 38%, oklch(21% 0.03 266));
+  --color-amber-700: oklch(87.9% 0.169 91.605);
+  --color-amber-800: oklch(92.4% 0.12 95.746);
+}
+
+.dark .folha-a4,
+.dark .manter-claro {
+  --color-superficie: #ffffff;
+  --color-fundo: #f6f7fb;
+  --color-slate-50: oklch(98.4% 0.003 247.858);
+  --color-slate-100: oklch(96.8% 0.007 247.896);
+  --color-slate-200: oklch(92.9% 0.013 255.508);
+  --color-slate-300: oklch(86.9% 0.022 252.894);
+  --color-slate-400: oklch(70.4% 0.04 256.788);
+  --color-slate-500: oklch(55.4% 0.046 257.417);
+  --color-slate-600: oklch(44.6% 0.043 257.281);
+  --color-slate-700: oklch(37.2% 0.044 257.287);
+  --color-slate-800: oklch(27.9% 0.041 260.031);
+  --color-slate-900: oklch(20.8% 0.042 265.755);
+  --color-slate-950: oklch(12.9% 0.042 264.695);
+  --color-marca-50: #eef2ff;
+  --color-marca-100: #e0e7ff;
+  --color-marca-200: #c7d2fe;
+  --color-marca-700: #4338ca;
+  --color-marca-800: #3730a3;
+  --color-marca-900: #312e81;
+  --color-emerald-50: oklch(97.9% 0.021 166.113);
+  --color-emerald-100: oklch(95% 0.052 163.051);
+  --color-emerald-200: oklch(90.5% 0.093 164.15);
+  --color-emerald-700: oklch(50.8% 0.118 165.612);
+  --color-emerald-800: oklch(43.2% 0.095 166.913);
+  --color-sky-50: oklch(97.7% 0.013 236.62);
+  --color-sky-100: oklch(95.1% 0.026 236.824);
+  --color-sky-200: oklch(90.1% 0.058 230.902);
+  --color-sky-700: oklch(50% 0.134 242.749);
+  --color-sky-800: oklch(44.3% 0.11 240.79);
+  --color-rose-50: oklch(96.9% 0.015 12.422);
+  --color-rose-100: oklch(94.1% 0.03 12.58);
+  --color-rose-200: oklch(89.2% 0.058 10.001);
+  --color-rose-700: oklch(51.4% 0.222 16.935);
+  --color-rose-800: oklch(45.5% 0.188 13.697);
+  --color-red-50: oklch(97.1% 0.013 17.38);
+  --color-red-100: oklch(93.6% 0.032 17.717);
+  --color-red-200: oklch(88.5% 0.062 18.334);
+  --color-red-700: oklch(50.5% 0.213 27.518);
+  --color-red-800: oklch(44.4% 0.177 26.899);
+  --color-amber-50: oklch(98.7% 0.022 95.277);
+  --color-amber-100: oklch(96.2% 0.059 95.617);
+  --color-amber-200: oklch(92.4% 0.12 95.746);
+  --color-amber-700: oklch(55.5% 0.163 48.998);
+  --color-amber-800: oklch(47.3% 0.137 46.201);
+  color-scheme: light;
 }
 
 /* ---------- Documento A4 (prévia e impressão) ---------- */
@@ -153,7 +249,12 @@ body {
 @media print {
   @page {
     size: A4;
-    margin: 0;
+    margin: 14mm 0 16mm;
+    @bottom-center {
+      content: 'Página ' counter(page) ' de ' counter(pages);
+      font: 8pt Inter, system-ui, sans-serif;
+      color: #94a3b8;
+    }
   }
   html,
   body {
@@ -172,9 +273,37 @@ body {
   .folha-a4 {
     box-shadow: none !important;
     min-height: auto;
+    width: auto;
+    padding: 0 15mm !important;
+  }
+  .folha-a4 thead {
+    display: table-header-group; /* repete o cabeçalho da tabela em cada página */
+  }
+  .folha-a4 tr {
+    break-inside: avoid;
   }
   * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+}
+
+/* Animações usadas com valores arbitrários (fora do @theme para não serem descartadas) */
+@keyframes crescer {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes crescer-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes deslizar {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
   }
 }

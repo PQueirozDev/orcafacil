@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 import { Link } from 'react-router-dom'
-import type { StatusOrcamento } from '../db'
+import { ROTULO_STATUS, type StatusExibido } from '../lib/status'
 
 export function Marca({ para = '/', claro = false }: { para?: string; claro?: boolean }) {
   return (
@@ -40,17 +40,20 @@ export function AreaTexto({ rotulo, className = '', ...props }: AreaProps) {
   )
 }
 
-export const STATUS: Record<StatusOrcamento, { rotulo: string; classe: string; ponto: string }> = {
-  rascunho: { rotulo: 'Rascunho', classe: 'bg-slate-100 text-slate-700 ring-slate-200', ponto: 'bg-slate-400' },
-  enviado: { rotulo: 'Enviado', classe: 'bg-sky-50 text-sky-700 ring-sky-200', ponto: 'bg-sky-500' },
-  aprovado: { rotulo: 'Aprovado', classe: 'bg-emerald-50 text-emerald-700 ring-emerald-200', ponto: 'bg-emerald-500' },
-  recusado: { rotulo: 'Recusado', classe: 'bg-rose-50 text-rose-700 ring-rose-200', ponto: 'bg-rose-500' },
+export const STATUS: Record<StatusExibido, { rotulo: string; classe: string; ponto: string }> = {
+  rascunho: { rotulo: ROTULO_STATUS.rascunho, classe: 'bg-slate-100 text-slate-700 ring-slate-200', ponto: 'bg-slate-400' },
+  pendente: { rotulo: ROTULO_STATUS.pendente, classe: 'bg-sky-50 text-sky-700 ring-sky-200', ponto: 'bg-sky-500' },
+  visualizado: { rotulo: ROTULO_STATUS.visualizado, classe: 'bg-marca-50 text-marca-700 ring-marca-200', ponto: 'bg-marca-500' },
+  aprovado: { rotulo: ROTULO_STATUS.aprovado, classe: 'bg-emerald-50 text-emerald-700 ring-emerald-200', ponto: 'bg-emerald-500' },
+  recusado: { rotulo: ROTULO_STATUS.recusado, classe: 'bg-rose-50 text-rose-700 ring-rose-200', ponto: 'bg-rose-500' },
+  expirado: { rotulo: ROTULO_STATUS.expirado, classe: 'bg-amber-50 text-amber-700 ring-amber-200', ponto: 'bg-amber-500' },
+  cancelado: { rotulo: ROTULO_STATUS.cancelado, classe: 'bg-slate-100 text-slate-500 ring-slate-200 line-through decoration-slate-400/60', ponto: 'bg-slate-300' },
 }
 
-export function SeloStatus({ status }: { status: StatusOrcamento }) {
+export function SeloStatus({ status }: { status: StatusExibido }) {
   const s = STATUS[status]
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${s.classe}`}>
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${s.classe}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${s.ponto}`} />
       {s.rotulo}
     </span>
@@ -167,32 +170,48 @@ const CAMINHOS: Record<string, ReactNode> = {
   x: <path d="M6 6l12 12M18 6 6 18" />,
   baixar: <path d="M12 3v12M7 10l5 5 5-5M5 21h14" />,
   subir: <path d="M12 21V9M7 14l5-5 5 5M5 3h14" />,
-}
-
-/** Símbolo do Pix (losangos), nas cores oficiais. */
-export function SimboloPix({ className = 'h-5 w-5' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <g fill="#32BCAD">
-        <path d="M18.1 17.6a2.7 2.7 0 0 1-1.9-.8l-2.8-2.8a.5.5 0 0 0-.7 0l-2.8 2.8a2.7 2.7 0 0 1-1.9.8h-.6l3.6 3.6a2.9 2.9 0 0 0 4 0l3.6-3.6z" />
-        <path d="M7.9 6.4a2.7 2.7 0 0 1 1.9.8l2.8 2.8a.5.5 0 0 0 .7 0l2.8-2.8a2.7 2.7 0 0 1 1.9-.8h.4L14.8 2.8a2.9 2.9 0 0 0-4 0L7.3 6.4z" />
-        <path d="m21.2 10-2.2-2.2h-.9a1.8 1.8 0 0 0-1.3.5l-2.8 2.8a1.3 1.3 0 0 1-1.8 0L9.4 8.3a1.8 1.8 0 0 0-1.3-.5H7L4.8 10a2.9 2.9 0 0 0 0 4L7 16.2h1.1a1.8 1.8 0 0 0 1.3-.5l2.8-2.8a1.3 1.3 0 0 1 1.8 0l2.8 2.8a1.8 1.8 0 0 0 1.3.5h.9l2.2-2.2a2.9 2.9 0 0 0 0-4z" />
-      </g>
-    </svg>
-  )
-}
-
-/** Desenho de um cartão de crédito colorido. */
-export function SimboloCartao({ className = 'h-5 w-7' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 28 20" className={className} aria-hidden="true">
-      <rect x="0.5" y="0.5" width="27" height="19" rx="3" fill="#4f46e5" />
-      <rect x="0.5" y="4.5" width="27" height="3.5" fill="#1e1b4b" />
-      <rect x="4" y="11" width="6" height="4.5" rx="1" fill="#facc15" />
-      <circle cx="19.5" cy="14" r="2.6" fill="#f97316" opacity=".9" />
-      <circle cx="22.5" cy="14" r="2.6" fill="#fde047" opacity=".9" />
-    </svg>
-  )
+  link: <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />,
+  sino: <path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0" />,
+  sol: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </>
+  ),
+  lua: <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />,
+  monitor: (
+    <>
+      <rect x="2" y="4" width="20" height="13" rx="2" />
+      <path d="M8 21h8M12 17v4" />
+    </>
+  ),
+  nuvem: <path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 0 0 4.5 12.5 3.5 3.5 0 0 0 6.5 19z" />,
+  nuvemOff: <path d="M3 3l18 18M17.5 19H6.5A3.5 3.5 0 0 1 5 12.3M9.4 6.6A6 6 0 0 1 16 10.3a4.5 4.5 0 0 1 4.7 6" />,
+  atualizar: <path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5" />,
+  desfazer: <path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />,
+  refazer: <path d="m15 14 5-5-5-5M20 9H9.5a5.5 5.5 0 0 0 0 11H13" />,
+  email: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </>
+  ),
+  relogio: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </>
+  ),
+  filtro: <path d="M3 5h18l-7 8v6l-4 2v-8z" />,
+  editar: <path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4" />,
+  usuario: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0 1 16 0" />
+    </>
+  ),
+  alerta: <path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />,
+  arrastar: <path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01" />,
 }
 
 export function Icone({ nome, className = 'h-4 w-4' }: { nome: keyof typeof CAMINHOS | string; className?: string }) {

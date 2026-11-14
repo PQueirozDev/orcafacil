@@ -102,7 +102,7 @@ export function Avisos() {
       {c && (
         <div className="fixed inset-0 z-[80] grid place-items-center p-4" role="dialog" aria-modal="true" aria-labelledby="titulo-confirmacao">
           <div className="absolute inset-0 animate-surgir bg-slate-900/50 backdrop-blur-sm" onClick={() => c.responder(false)} />
-          <div className="relative w-full max-w-sm animate-escala rounded-3xl bg-white p-6 shadow-2xl">
+          <div className="relative w-full max-w-sm animate-escala rounded-3xl bg-superficie p-6 shadow-2xl">
             <div className={`grid h-12 w-12 place-items-center rounded-2xl ${c.perigo ? 'bg-red-50 text-red-600' : 'bg-marca-50 text-marca-600'}`}>
               <Icone nome={c.perigo ? 'lixo' : 'documento'} className="h-6 w-6" />
             </div>
