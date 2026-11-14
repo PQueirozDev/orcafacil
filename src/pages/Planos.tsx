@@ -32,7 +32,7 @@ export function Planos() {
       <p className="mt-3 max-w-xl text-slate-600">Comece grátis. Assine o Pro quando enviar mais propostas por mês.</p>
       <div className="mt-10 grid gap-6 md:grid-cols-2">
         {PLANOS.map((p) => (
-          <div key={p.nome} className={`flex flex-col border bg-superficie p-7 ${p.destaque ? 'border-slate-900 shadow-[6px_6px_0_0_var(--color-slate-900)]' : 'border-slate-300'}`}>
+          <div key={p.nome} className={`flex flex-col rounded-xl border bg-superficie p-7 ${p.destaque ? 'border-slate-900 shadow-[6px_6px_0_0_var(--color-slate-900)]' : 'border-slate-300'}`}>
             <p className="etiqueta">{p.nome}</p>
             <p className="mt-4 font-display text-6xl font-bold text-slate-900">
               {p.preco}

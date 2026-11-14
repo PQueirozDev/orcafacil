@@ -21,7 +21,7 @@ function Moldura({ children }: { children: React.ReactNode }) {
         <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-10">{children}</main>
       </div>
       <aside className="papel-quadriculado hidden border-l border-slate-900 p-12 lg:flex lg:flex-col lg:justify-center">
-        <div className="mx-auto w-full max-w-md border border-slate-900 bg-superficie p-8 shadow-[6px_6px_0_0_var(--color-slate-900)]">
+        <div className="mx-auto w-full max-w-md rounded-xl border border-slate-900 bg-superficie p-8 shadow-[6px_6px_0_0_var(--color-slate-900)]">
           <p className="etiqueta">Por que criar conta</p>
           <p className="mt-3 font-display text-4xl leading-none font-bold tracking-tight text-slate-900 uppercase">Enviado de manhã, <span className="grifo">aprovado</span> antes do almoço.</p>
           <ul className="mt-8 space-y-2.5 text-sm text-slate-700">

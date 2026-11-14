@@ -85,7 +85,7 @@ export function Plano() {
             <span className="text-xl font-medium text-slate-500"> {plano.limite ? `de ${plano.limite} links` : 'links (ilimitado)'}</span>
           </p>
           {plano.limite && (
-            <div className="mt-3 h-2 border border-slate-900 bg-superficie" role="progressbar" aria-valuemin={0} aria-valuemax={plano.limite} aria-valuenow={plano.linksNoMes}>
+            <div className="mt-3 h-2 overflow-hidden rounded-full border border-slate-900 bg-superficie" role="progressbar" aria-valuemin={0} aria-valuemax={plano.limite} aria-valuenow={plano.linksNoMes}>
               <div className={`h-full ${uso >= 100 ? 'bg-red-600' : 'bg-slate-900'}`} style={{ width: `${uso}%` }} />
             </div>
           )}
@@ -117,7 +117,7 @@ export function Plano() {
           <section className="cartao p-5 shadow-[6px_6px_0_0_var(--color-slate-900)] sm:p-6" style={{ borderColor: 'var(--color-slate-900)' }}>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="font-display text-3xl font-bold tracking-tight text-slate-900 uppercase">OrçaFácil Pro</p>
-              <div role="radiogroup" aria-label="Ciclo de cobrança" className="flex border border-slate-900 text-sm font-medium">
+              <div role="radiogroup" aria-label="Ciclo de cobrança" className="flex overflow-hidden rounded-full border border-slate-900 text-sm font-medium">
                 {(['mensal', 'anual'] as const).map((c) => (
                   <button
                     key={c}

@@ -183,7 +183,7 @@ function PainelCompartilhar({ orc }: { orc: Orcamento }) {
             </label>
           </div>
           {noLimite || (plano.limite != null && plano.linksNoMes >= plano.limite) ? (
-            <div className="border border-slate-900 bg-destaque-200 p-3 text-sm text-[#161512]">
+            <div className="rounded-lg border border-slate-900 bg-destaque-200 p-3 text-sm text-[#161512]">
               Você usou os {plano.limite} links do plano grátis neste mês.{' '}
               <Link to="/app/plano" className="font-semibold underline">Assine o Pro</Link> para links ilimitados.
             </div>

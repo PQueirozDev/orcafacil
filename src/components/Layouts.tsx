@@ -324,7 +324,7 @@ export function LayoutApp() {
                 to="/app/conta"
                 title={usuario.email}
                 aria-label="Minha conta"
-                className="ml-1 grid h-8 w-8 place-items-center rounded-sm bg-slate-900 font-mono text-xs font-semibold text-slate-50"
+                className="ml-1 grid h-8 w-8 place-items-center rounded-full bg-slate-900 font-mono text-xs font-semibold text-slate-50"
               >
                 {(usuario.nome || usuario.email).slice(0, 1).toUpperCase()}
               </Link>
@@ -360,7 +360,7 @@ export function LayoutApp() {
             to={l.para}
             end={l.fim}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isActive ? 'bg-destaque-300 text-[#161512]' : 'text-slate-500'}`
+              `mx-1 my-1 flex flex-col items-center gap-0.5 rounded-lg py-1.5 text-[11px] font-medium ${isActive ? 'bg-destaque-300 text-[#161512]' : 'text-slate-500'}`
             }
           >
             <Icone nome={l.icone} className="h-5 w-5" />
