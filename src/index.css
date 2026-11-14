@@ -3,62 +3,54 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --color-marca-50: #eef2ff;
-  --color-marca-100: #e0e7ff;
-  --color-marca-200: #c7d2fe;
-  --color-marca-500: #6366f1;
-  --color-marca-600: #4f46e5;
-  --color-marca-700: #4338ca;
-  --color-marca-800: #3730a3;
-  --color-marca-900: #312e81;
-  --color-violeta-600: #7c3aed;
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-marca-50: #eef6f3;
+  --color-marca-100: #d5ebe3;
+  --color-marca-200: #acd6c8;
+  --color-marca-300: #7bbaa6;
+  --color-marca-400: #4c9c85;
+  --color-marca-500: #2c806a;
+  --color-marca-600: #1f6a58;
+  --color-marca-700: #195747;
+  --color-marca-800: #16473b;
+  --color-marca-900: #133b31;
+  --color-marca-950: #0a221c;
+  --color-slate-50: oklch(98.5% 0.001 106.423);
+  --color-slate-100: oklch(97% 0.001 106.424);
+  --color-slate-200: oklch(92.3% 0.003 48.717);
+  --color-slate-300: oklch(86.9% 0.005 56.366);
+  --color-slate-400: oklch(70.9% 0.01 56.259);
+  --color-slate-500: oklch(55.3% 0.013 58.071);
+  --color-slate-600: oklch(44.4% 0.011 73.639);
+  --color-slate-700: oklch(37.4% 0.01 67.558);
+  --color-slate-800: oklch(26.8% 0.007 34.298);
+  --color-slate-900: oklch(21.6% 0.006 56.043);
+  --color-slate-950: oklch(14.7% 0.004 49.25);
   --color-superficie: #ffffff;
-  --color-fundo: #f6f7fb;
-  --color-marca-300: #a5b4fc;
-  --color-marca-400: #818cf8;
-  --spacing-68: 17rem;
+  --color-fundo: #f7f6f2;
+  --spacing-68: 16.5rem;
 
-  --animate-entrada: entrada 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-surgir: surgir 0.25s ease-out both;
-  --animate-escala: escala 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-flutuar: flutuar 6s ease-in-out infinite;
+  --animate-entrada: entrada 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-surgir: surgir 0.2s ease-out both;
+  --animate-escala: escala 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @keyframes entrada {
     from {
       opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
+      transform: translateY(6px);
     }
   }
   @keyframes surgir {
     from {
       opacity: 0;
     }
-    to {
-      opacity: 1;
-    }
   }
   @keyframes escala {
     from {
       opacity: 0;
-      transform: translateY(8px) scale(0.97);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-  @keyframes flutuar {
-    0%,
-    100% {
-      transform: translateY(0) rotate(1deg);
-    }
-    50% {
-      transform: translateY(-10px) rotate(-0.5deg);
+      transform: translateY(4px) scale(0.985);
     }
   }
 }
@@ -75,12 +67,18 @@ body {
 
 ::selection {
   background: var(--color-marca-200);
+  color: var(--color-marca-950);
 }
 
-/* Itens de lista que entram em cascata: use style={{ '--i': indice }} */
+:focus-visible {
+  outline: 2px solid var(--color-marca-500);
+  outline-offset: 2px;
+}
+
+/* Itens de lista que entram em sequência: use style={{ '--i': indice }} */
 .cascata > * {
   animation: var(--animate-entrada);
-  animation-delay: calc(min(var(--i, 0), 12) * 40ms);
+  animation-delay: calc(min(var(--i, 0), 10) * 25ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -95,88 +93,86 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition duration-200 select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-500 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100;
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors duration-150 select-none disabled:cursor-not-allowed disabled:opacity-50;
 }
 
-/* Componentes ficam na camada "components" para que utilitários (ex.: pl-9) possam sobrescrevê-los */
+/* Componentes ficam na camada "components" para que utilitários possam sobrescrevê-los */
 @layer components {
-/* Campos de formulário padrão */
-.campo {
-  @apply w-full rounded-xl border border-slate-200 bg-superficie px-3.5 py-2.5 text-sm text-slate-900 shadow-xs outline-none transition duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-marca-500 focus:ring-4 focus:ring-marca-100;
-}
-
-.rotulo {
-  @apply mb-1.5 block text-xs font-semibold text-slate-600;
-}
-
-.btn-primario {
-  @apply btn bg-gradient-to-b from-marca-500 to-marca-600 text-white shadow-md shadow-marca-600/25 ring-1 ring-inset ring-white/10 hover:from-marca-600 hover:to-marca-700 hover:shadow-lg hover:shadow-marca-600/30;
-}
-.btn-secundario {
-  @apply btn border border-slate-200 bg-superficie text-slate-700 shadow-xs hover:border-slate-300 hover:bg-slate-50;
-}
-.btn-fantasma {
-  @apply btn text-slate-600 hover:bg-slate-100 hover:text-slate-900;
-}
-.btn-perigo {
-  @apply btn border border-red-200 bg-superficie text-red-600 hover:border-red-300 hover:bg-red-50;
-}
-
-.cartao {
-  @apply rounded-2xl border border-slate-200/80 bg-superficie shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)];
-}
-
-/* Cartão que reage ao passar o mouse */
-.cartao-interativo {
-  @apply rounded-2xl border border-slate-200/80 bg-superficie shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-marca-200 hover:shadow-[0_12px_32px_-12px_rgba(79,70,229,0.25)];
-}
+  .campo {
+    @apply w-full rounded-lg border border-slate-300 bg-superficie px-3 py-2 text-sm text-slate-900 transition-colors duration-150 outline-none placeholder:text-slate-400 hover:border-slate-400 focus:border-marca-600 focus:ring-3 focus:ring-marca-600/15 disabled:bg-slate-100 disabled:text-slate-500 aria-invalid:border-red-400;
+  }
+  .rotulo {
+    @apply mb-1.5 block text-[13px] font-medium text-slate-700;
+  }
+  .btn-primario {
+    @apply btn bg-slate-900 text-slate-50 hover:bg-slate-700;
+  }
+  .btn-destaque {
+    @apply btn bg-marca-600 text-white hover:bg-marca-700 dark:hover:bg-marca-500;
+  }
+  .btn-secundario {
+    @apply btn border border-slate-300 bg-superficie text-slate-800 hover:bg-slate-50;
+  }
+  .btn-fantasma {
+    @apply btn text-slate-600 hover:bg-slate-100 hover:text-slate-900;
+  }
+  .btn-perigo {
+    @apply btn border border-red-200 bg-superficie text-red-700 hover:bg-red-50;
+  }
+  .cartao {
+    @apply rounded-xl border border-slate-200 bg-superficie;
+  }
+  .cartao-interativo {
+    @apply rounded-xl border border-slate-200 bg-superficie transition-colors duration-150 hover:border-slate-300;
+  }
 }
 
 
 /* ---------- Tema escuro: remapeia a paleta; o documento A4 continua sempre claro ---------- */
 .dark {
-  --color-superficie: oklch(21% 0.03 266);
-  --color-fundo: oklch(15.5% 0.028 266);
-  --color-slate-50: oklch(25.5% 0.032 264);
-  --color-slate-100: oklch(28.5% 0.034 264);
-  --color-slate-200: oklch(33% 0.035 262);
-  --color-slate-300: oklch(44.6% 0.043 257.281);
-  --color-slate-400: oklch(55.4% 0.046 257.417);
-  --color-slate-500: oklch(70.4% 0.04 256.788);
-  --color-slate-600: oklch(86.9% 0.022 252.894);
-  --color-slate-700: oklch(92.9% 0.013 255.508);
-  --color-slate-800: oklch(96.8% 0.007 247.896);
-  --color-slate-900: oklch(98.4% 0.003 247.858);
-  --color-slate-950: oklch(98.4% 0.003 247.858);
-  --color-marca-50: oklch(27% 0.07 277);
-  --color-marca-100: oklch(32% 0.09 277);
-  --color-marca-200: oklch(40% 0.12 277);
-  --color-marca-700: #a5b4fc;
-  --color-marca-800: #c7d2fe;
-  --color-marca-900: #e0e7ff;
-  --color-emerald-50: color-mix(in oklch, oklch(69.6% 0.17 162.48) 14%, oklch(21% 0.03 266));
-  --color-emerald-100: color-mix(in oklch, oklch(69.6% 0.17 162.48) 22%, oklch(21% 0.03 266));
-  --color-emerald-200: color-mix(in oklch, oklch(69.6% 0.17 162.48) 38%, oklch(21% 0.03 266));
+  --color-superficie: oklch(21.5% 0.006 56);
+  --color-fundo: oklch(17% 0.005 56);
+  --color-slate-50: oklch(25% 0.007 56);
+  --color-slate-100: oklch(28% 0.008 56);
+  --color-slate-200: oklch(32% 0.009 56);
+  --color-slate-300: oklch(44.4% 0.011 73.639);
+  --color-slate-400: oklch(55.3% 0.013 58.071);
+  --color-slate-500: oklch(70.9% 0.01 56.259);
+  --color-slate-600: oklch(86.9% 0.005 56.366);
+  --color-slate-700: oklch(92.3% 0.003 48.717);
+  --color-slate-800: oklch(97% 0.001 106.424);
+  --color-slate-900: oklch(98.5% 0.001 106.423);
+  --color-slate-950: oklch(98.5% 0.001 106.423);
+  --color-marca-50: oklch(28% 0.04 170);
+  --color-marca-100: oklch(32% 0.05 170);
+  --color-marca-200: oklch(40% 0.07 170);
+  --color-marca-700: #7bbaa6;
+  --color-marca-800: #acd6c8;
+  --color-marca-900: #d5ebe3;
+  --color-marca-950: #eef6f3;
+  --color-emerald-50: color-mix(in oklch, oklch(69.6% 0.17 162.48) 14%, oklch(21.5% 0.006 56));
+  --color-emerald-100: color-mix(in oklch, oklch(69.6% 0.17 162.48) 22%, oklch(21.5% 0.006 56));
+  --color-emerald-200: color-mix(in oklch, oklch(69.6% 0.17 162.48) 38%, oklch(21.5% 0.006 56));
   --color-emerald-700: oklch(84.5% 0.143 164.978);
   --color-emerald-800: oklch(90.5% 0.093 164.15);
-  --color-sky-50: color-mix(in oklch, oklch(68.5% 0.169 237.323) 14%, oklch(21% 0.03 266));
-  --color-sky-100: color-mix(in oklch, oklch(68.5% 0.169 237.323) 22%, oklch(21% 0.03 266));
-  --color-sky-200: color-mix(in oklch, oklch(68.5% 0.169 237.323) 38%, oklch(21% 0.03 266));
+  --color-sky-50: color-mix(in oklch, oklch(68.5% 0.169 237.323) 14%, oklch(21.5% 0.006 56));
+  --color-sky-100: color-mix(in oklch, oklch(68.5% 0.169 237.323) 22%, oklch(21.5% 0.006 56));
+  --color-sky-200: color-mix(in oklch, oklch(68.5% 0.169 237.323) 38%, oklch(21.5% 0.006 56));
   --color-sky-700: oklch(82.8% 0.111 230.318);
   --color-sky-800: oklch(90.1% 0.058 230.902);
-  --color-rose-50: color-mix(in oklch, oklch(64.5% 0.246 16.439) 14%, oklch(21% 0.03 266));
-  --color-rose-100: color-mix(in oklch, oklch(64.5% 0.246 16.439) 22%, oklch(21% 0.03 266));
-  --color-rose-200: color-mix(in oklch, oklch(64.5% 0.246 16.439) 38%, oklch(21% 0.03 266));
+  --color-rose-50: color-mix(in oklch, oklch(64.5% 0.246 16.439) 14%, oklch(21.5% 0.006 56));
+  --color-rose-100: color-mix(in oklch, oklch(64.5% 0.246 16.439) 22%, oklch(21.5% 0.006 56));
+  --color-rose-200: color-mix(in oklch, oklch(64.5% 0.246 16.439) 38%, oklch(21.5% 0.006 56));
   --color-rose-700: oklch(81% 0.117 11.638);
   --color-rose-800: oklch(89.2% 0.058 10.001);
-  --color-red-50: color-mix(in oklch, oklch(63.7% 0.237 25.331) 14%, oklch(21% 0.03 266));
-  --color-red-100: color-mix(in oklch, oklch(63.7% 0.237 25.331) 22%, oklch(21% 0.03 266));
-  --color-red-200: color-mix(in oklch, oklch(63.7% 0.237 25.331) 38%, oklch(21% 0.03 266));
+  --color-red-50: color-mix(in oklch, oklch(63.7% 0.237 25.331) 14%, oklch(21.5% 0.006 56));
+  --color-red-100: color-mix(in oklch, oklch(63.7% 0.237 25.331) 22%, oklch(21.5% 0.006 56));
+  --color-red-200: color-mix(in oklch, oklch(63.7% 0.237 25.331) 38%, oklch(21.5% 0.006 56));
   --color-red-700: oklch(80.8% 0.114 19.571);
   --color-red-800: oklch(88.5% 0.062 18.334);
-  --color-amber-50: color-mix(in oklch, oklch(76.9% 0.188 70.08) 14%, oklch(21% 0.03 266));
-  --color-amber-100: color-mix(in oklch, oklch(76.9% 0.188 70.08) 22%, oklch(21% 0.03 266));
-  --color-amber-200: color-mix(in oklch, oklch(76.9% 0.188 70.08) 38%, oklch(21% 0.03 266));
+  --color-amber-50: color-mix(in oklch, oklch(76.9% 0.188 70.08) 14%, oklch(21.5% 0.006 56));
+  --color-amber-100: color-mix(in oklch, oklch(76.9% 0.188 70.08) 22%, oklch(21.5% 0.006 56));
+  --color-amber-200: color-mix(in oklch, oklch(76.9% 0.188 70.08) 38%, oklch(21.5% 0.006 56));
   --color-amber-700: oklch(87.9% 0.169 91.605);
   --color-amber-800: oklch(92.4% 0.12 95.746);
 }
@@ -184,24 +180,25 @@ body {
 .dark .folha-a4,
 .dark .manter-claro {
   --color-superficie: #ffffff;
-  --color-fundo: #f6f7fb;
-  --color-slate-50: oklch(98.4% 0.003 247.858);
-  --color-slate-100: oklch(96.8% 0.007 247.896);
-  --color-slate-200: oklch(92.9% 0.013 255.508);
-  --color-slate-300: oklch(86.9% 0.022 252.894);
-  --color-slate-400: oklch(70.4% 0.04 256.788);
-  --color-slate-500: oklch(55.4% 0.046 257.417);
-  --color-slate-600: oklch(44.6% 0.043 257.281);
-  --color-slate-700: oklch(37.2% 0.044 257.287);
-  --color-slate-800: oklch(27.9% 0.041 260.031);
-  --color-slate-900: oklch(20.8% 0.042 265.755);
-  --color-slate-950: oklch(12.9% 0.042 264.695);
-  --color-marca-50: #eef2ff;
-  --color-marca-100: #e0e7ff;
-  --color-marca-200: #c7d2fe;
-  --color-marca-700: #4338ca;
-  --color-marca-800: #3730a3;
-  --color-marca-900: #312e81;
+  --color-fundo: #f7f6f2;
+  --color-slate-50: oklch(98.5% 0.001 106.423);
+  --color-slate-100: oklch(97% 0.001 106.424);
+  --color-slate-200: oklch(92.3% 0.003 48.717);
+  --color-slate-300: oklch(86.9% 0.005 56.366);
+  --color-slate-400: oklch(70.9% 0.01 56.259);
+  --color-slate-500: oklch(55.3% 0.013 58.071);
+  --color-slate-600: oklch(44.4% 0.011 73.639);
+  --color-slate-700: oklch(37.4% 0.01 67.558);
+  --color-slate-800: oklch(26.8% 0.007 34.298);
+  --color-slate-900: oklch(21.6% 0.006 56.043);
+  --color-slate-950: oklch(14.7% 0.004 49.25);
+  --color-marca-50: #eef6f3;
+  --color-marca-100: #d5ebe3;
+  --color-marca-200: #acd6c8;
+  --color-marca-700: #195747;
+  --color-marca-800: #16473b;
+  --color-marca-900: #133b31;
+  --color-marca-950: #0a221c;
   --color-emerald-50: oklch(97.9% 0.021 166.113);
   --color-emerald-100: oklch(95% 0.052 163.051);
   --color-emerald-200: oklch(90.5% 0.093 164.15);

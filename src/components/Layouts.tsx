@@ -117,7 +117,7 @@ function CentralNotificacoes() {
       >
         <Icone nome="sino" className="h-[18px] w-[18px]" />
         {naoLidas > 0 && (
-          <span className="absolute right-1 top-1 grid h-4 min-w-4 animate-escala place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white ring-2 ring-superficie">
+          <span className="absolute right-1 top-1 grid h-4 min-w-4 animate-escala place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white ring-2 ring-superficie">
             {naoLidas > 9 ? '9+' : naoLidas}
           </span>
         )}
@@ -126,7 +126,7 @@ function CentralNotificacoes() {
         <div
           role="dialog"
           aria-label="Central de notificações"
-          className="absolute right-0 top-12 z-50 w-[min(24rem,calc(100vw-2rem))] animate-escala overflow-hidden rounded-2xl border border-slate-200 bg-superficie shadow-2xl"
+          className="absolute right-0 top-12 z-50 w-[min(24rem,calc(100vw-2rem))] animate-escala overflow-hidden rounded-xl border border-slate-200 bg-superficie shadow-2xl"
         >
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <h2 className="font-semibold text-slate-900">Notificações</h2>
@@ -186,11 +186,11 @@ export function LayoutPublico() {
       <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-lg focus:bg-superficie focus:px-4 focus:py-2 focus:shadow-lg">
         Pular para o conteúdo
       </a>
-      <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-superficie/80 backdrop-blur-lg">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-fundo/90 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
           <Marca />
-          <nav aria-label="Principal" className="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
-            <a href="/#funcionalidades" className="hover:text-slate-900">Funcionalidades</a>
+          <nav aria-label="Principal" className="hidden items-center gap-7 text-sm text-slate-600 md:flex">
+            <a href="/#recursos" className="hover:text-slate-900">Recursos</a>
             <a href="/#modelos" className="hover:text-slate-900">Modelos</a>
             <a href="/#como-funciona" className="hover:text-slate-900">Como funciona</a>
             <Link to="/planos" className="hover:text-slate-900">Planos</Link>
@@ -202,9 +202,12 @@ export function LayoutPublico() {
             ) : (
               <>
                 {nuvemDisponivel && (
-                  <Link to="/entrar" className="btn-fantasma px-3">Entrar</Link>
+                  <>
+                    <Link to="/entrar" className="btn-fantasma px-3">Entrar</Link>
+                    <Link to="/entrar?modo=cadastrar" className="btn-primario">Criar conta</Link>
+                  </>
                 )}
-                <Link to="/app" className="btn-primario hidden sm:inline-flex">Criar orçamento</Link>
+                {!nuvemDisponivel && <Link to="/app" className="btn-primario">Criar orçamento</Link>}
               </>
             )}
           </div>
@@ -220,7 +223,7 @@ export function LayoutPublico() {
 
 function Rodape() {
   return (
-    <footer className="border-t border-slate-200 bg-slate-50">
+    <footer className="border-t border-slate-200">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2">
           <Marca />
@@ -231,7 +234,7 @@ function Rodape() {
         <nav aria-label="Produto" className="text-sm">
           <h2 className="font-semibold text-slate-900">Produto</h2>
           <ul className="mt-3 space-y-2 text-slate-500">
-            <li><a href="/#funcionalidades" className="hover:text-slate-900">Funcionalidades</a></li>
+            <li><a href="/#recursos" className="hover:text-slate-900">Recursos</a></li>
             <li><a href="/#modelos" className="hover:text-slate-900">Modelos</a></li>
             <li><Link to="/planos" className="hover:text-slate-900">Planos</Link></li>
             <li><Link to="/app" className="hover:text-slate-900">Criar orçamento</Link></li>
@@ -252,7 +255,7 @@ function Rodape() {
       </div>
       <div className="border-t border-slate-200">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} OrçaFácil.</p>
+          <p>© {new Date().getFullYear()} OrçaFácil</p>
           <p>
             Desenvolvido por{' '}
             <a href="https://www.pqueirozdev.com.br/" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-700 hover:text-marca-600">
@@ -270,7 +273,7 @@ function Rodape() {
 // ------------------------------------------------------------------------------------------
 const LINKS_APP = [
   { para: '/app', rotulo: 'Painel', icone: 'painel', fim: true },
-  { para: '/app/modelo', rotulo: 'Modelos', icone: 'documento' },
+  { para: '/app/modelo', rotulo: 'Modelos', icone: 'modelos' },
   { para: '/app/clientes', rotulo: 'Clientes', icone: 'clientes' },
   { para: '/app/configuracoes', rotulo: 'Empresa', icone: 'config' },
   { para: '/app/conta', rotulo: 'Conta', icone: 'usuario' },
@@ -301,20 +304,14 @@ export function LayoutApp() {
           to={l.para}
           end={l.fim}
           className={({ isActive }) =>
-            `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition duration-200 ${
-              isActive ? 'bg-marca-50 text-marca-700 ring-1 ring-marca-100' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            `group relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
+              isActive ? 'bg-slate-100 text-slate-900' : 'text-slate-600 hover:bg-slate-100/70 hover:text-slate-900'
             }`
           }
         >
           {({ isActive }) => (
             <>
-              <span
-                className={`grid h-8 w-8 place-items-center rounded-lg transition duration-200 ${
-                  isActive ? 'bg-marca-600 text-white shadow-md shadow-marca-600/30' : 'bg-slate-100 text-slate-500 group-hover:text-slate-700'
-                }`}
-              >
-                <Icone nome={l.icone} className="h-4 w-4" />
-              </span>
+              <Icone nome={l.icone} className={`h-[18px] w-[18px] ${isActive ? 'text-marca-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
               {l.rotulo}
             </>
           )}
@@ -325,7 +322,7 @@ export function LayoutApp() {
 
   const cartaoConta = usuario ? (
     <div className="flex items-center gap-3 px-1">
-      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-marca-500 to-violeta-600 text-xs font-bold text-white">
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-marca-100 text-xs font-semibold text-marca-800">
         {(usuario.nome || usuario.email).slice(0, 1).toUpperCase()}
       </div>
       <div className="min-w-0 flex-1">
@@ -346,16 +343,21 @@ export function LayoutApp() {
       </button>
     </div>
   ) : (
-    <div className="rounded-xl bg-slate-50 p-3.5 ring-1 ring-slate-200">
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3.5">
       <div className="text-sm font-semibold text-slate-900">Modo visitante</div>
       <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
         Seus orçamentos ficam só neste navegador.
         {nuvemDisponivel && ' Crie uma conta grátis para salvar na nuvem, usar em outros aparelhos e receber aprovações.'}
       </p>
       {nuvemDisponivel && (
-        <Link to="/entrar?modo=cadastrar&voltar=/app/conta" className="btn-primario mt-3 w-full py-2 text-xs">
-          Criar conta grátis
-        </Link>
+        <div className="mt-3 grid grid-cols-2 gap-1.5">
+          <Link to="/entrar?modo=cadastrar&voltar=/app/conta" className="btn-primario px-2 py-1.5 text-xs">
+            Criar conta
+          </Link>
+          <Link to="/entrar?voltar=/app" className="btn-secundario px-2 py-1.5 text-xs">
+            Entrar
+          </Link>
+        </div>
       )}
     </div>
   )
@@ -377,7 +379,7 @@ export function LayoutApp() {
 
       {/* Barra lateral (desktop) */}
       <aside className="nao-imprimir fixed inset-y-0 left-0 hidden w-68 flex-col border-r border-slate-200/80 bg-superficie p-4 lg:flex">
-        <div className="mb-7 px-1 pt-1">
+        <div className="mb-6 px-1.5 pt-1">
           <Marca para="/app" />
         </div>
         <div className="flex-1 overflow-y-auto">{nav}</div>

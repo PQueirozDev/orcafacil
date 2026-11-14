@@ -272,7 +272,7 @@ export function EditorOrcamento() {
           </Link>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Orçamento {formatarNumero(orc.numero)}</h1>
+              <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Orçamento {formatarNumero(orc.numero)}</h1>
               <SeloStatus status={exibido} />
               {erroSalvar ? (
                 <button role="status" onClick={() => void gravar()} className="rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700 ring-1 ring-red-200 hover:bg-red-100">
@@ -329,7 +329,7 @@ export function EditorOrcamento() {
       </div>
 
       {bloqueado && (
-        <div className="mb-6 flex flex-col gap-3 rounded-2xl bg-amber-50 p-4 text-sm text-amber-800 ring-1 ring-amber-200 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-6 flex flex-col gap-3 rounded-xl bg-amber-50 p-4 text-sm text-amber-800 ring-1 ring-amber-200 sm:flex-row sm:items-center sm:justify-between">
           <p>
             Este orçamento está <strong>{ROTULO_STATUS[orc.status].toLowerCase()}</strong> e não pode mais ser editado, para preservar o
             que foi decidido. Para propor outra versão, crie uma cópia.
@@ -557,7 +557,7 @@ export function EditorOrcamento() {
                 <div className="flex justify-between"><dt className="text-slate-500">Desconto</dt><dd>− {formatarMoeda(totais.desconto)}</dd></div>
                 <div className="flex justify-between"><dt className="text-slate-500">Impostos</dt><dd>{formatarMoeda(totais.imposto)}</dd></div>
                 <div className="flex justify-between"><dt className="text-slate-500">Frete</dt><dd>{formatarMoeda(totais.frete)}</dd></div>
-                <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-bold text-slate-900"><dt>Total</dt><dd>{formatarMoeda(totais.total)}</dd></div>
+                <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-semibold text-slate-900"><dt>Total</dt><dd>{formatarMoeda(totais.total)}</dd></div>
               </dl>
             </div>
           </Secao>

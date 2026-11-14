@@ -5,7 +5,7 @@ export const MODELOS: Record<ModeloId, { nome: string; descricao: string; cor: s
   moderno: {
     nome: 'Moderno',
     descricao: 'Minimalista e elegante, cantos arredondados.',
-    cor: '#4f46e5',
+    cor: '#1f6a58',
     layout: {},
   },
   classico: {

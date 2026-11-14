@@ -7,38 +7,28 @@ import type { ModeloId } from '../db'
 import { EMPRESA_EXEMPLO, orcamentoExemplo } from '../lib/exemplo'
 import { layoutDoModelo, MODELOS } from '../lib/modelos'
 
-const BENEFICIOS = [
-  { icone: 'raio', titulo: 'Pronto em minutos', texto: 'Itens, fotos, descontos e impostos calculados na hora, com prévia ao vivo igual ao PDF.' },
-  { icone: 'documento', titulo: 'Cara de empresa grande', texto: 'Sua logo, suas cores e cinco modelos profissionais. Nada de planilha improvisada.' },
-  { icone: 'check', titulo: 'Aprovação sem papelada', texto: 'Envie um link: o cliente vê no celular e aprova ou recusa com um toque. Você é avisado.' },
-]
-
 const PASSOS = [
-  { titulo: 'Monte o orçamento', texto: 'Escolha o cliente, adicione itens com fotos e ajuste valores. A prévia atualiza enquanto você digita.' },
-  { titulo: 'Escolha o visual', texto: 'Aplique um modelo e personalize cores, fonte e a posição de cada parte.' },
-  { titulo: 'Envie o link ou o PDF', texto: 'Compartilhe pelo WhatsApp ou e-mail, ou baixe o PDF em A4.' },
-  { titulo: 'Receba a resposta', texto: 'O cliente aprova ou recusa online. O status muda no seu painel e você recebe uma notificação.' },
+  ['Monte', 'Cliente, itens com foto, desconto e impostos. A prévia acompanha cada tecla.'],
+  ['Personalize', 'Escolha um dos cinco modelos e ajuste cor, fonte e a ordem das seções.'],
+  ['Envie', 'Mande o link pelo WhatsApp ou e-mail, ou baixe o PDF em A4.'],
+  ['Acompanhe', 'O cliente aprova pelo celular. O status muda no painel e você é avisado.'],
 ]
 
-const FUNCIONALIDADES = [
-  ['foto', 'Fotos por item e galeria', 'Mostre o produto, o local ou o projeto direto no orçamento.'],
-  ['link', 'Link de proposta seguro', 'Token aleatório, validade opcional e revogação a qualquer momento.'],
-  ['painel', 'Painel com gráficos', 'Valores propostos e aprovados por mês, taxa de aprovação e filtros.'],
-  ['clientes', 'Cadastro de clientes', 'Histórico de propostas por cliente e preenchimento automático.'],
-  ['sino', 'Notificações', 'Saiba quando uma proposta é aprovada, recusada ou está para vencer.'],
-  ['nuvem', 'Na nuvem e offline', 'Com conta, sincroniza entre aparelhos. Sem internet, continua salvando no aparelho.'],
-  ['relogio', 'Linha do tempo', 'Criação, envio, abertura do link e decisão registrados com data e hora.'],
-  ['lua', 'Tema claro e escuro', 'Segue o seu sistema ou a sua preferência, no computador e no celular.'],
-  ['cadeado', 'Seus dados protegidos', 'Cada conta só acessa os próprios dados, com regras aplicadas no banco.'],
-] as const
+const RECURSOS = [
+  ['foto', 'Fotos no orçamento', 'Uma por item ou uma galeria inteira: produto, local, projeto.'],
+  ['link', 'Aprovação por link', 'Link seguro com validade e revogação. O cliente responde sem criar conta.'],
+  ['grafico', 'Painel de vendas', 'Valores propostos e aprovados por mês, taxa de aprovação e filtros.'],
+  ['clientes', 'Clientes e histórico', 'Cadastre uma vez, preencha com um clique e veja tudo o que já foi proposto.'],
+  ['sino', 'Avisos', 'Saiba quando uma proposta é aprovada, recusada ou está perto de vencer.'],
+  ['nuvem', 'Nuvem e offline', 'Com conta, sincroniza entre aparelhos. Sem internet, continua salvando.'],
+]
 
 const PERGUNTAS = [
-  ['Preciso criar conta para usar?', 'Não. Você pode criar e exportar orçamentos em PDF sem cadastro: eles ficam salvos no seu navegador. A conta grátis libera a nuvem, o link de aprovação e as notificações.'],
-  ['Quanto custa?', 'O OrçaFácil é gratuito. Não pedimos cartão de crédito.'],
-  ['Como o cliente aprova a proposta?', 'Você gera um link e envia pelo WhatsApp ou e-mail. O cliente abre no navegador, confere os itens e clica em aprovar ou recusar, informando o nome. Não precisa instalar nada nem criar conta.'],
-  ['O aceite tem validade jurídica?', 'É um aceite eletrônico simples: registra nome, data e horário da resposta. Ele não substitui uma assinatura digital certificada (ICP-Brasil) quando ela for exigida.'],
-  ['Posso usar no celular?', 'Sim. O app funciona no navegador do celular e pode ser instalado na tela inicial como um aplicativo.'],
-  ['E se eu editar o orçamento depois de enviar?', 'O link mostra uma cópia fixa do que foi enviado, para o cliente aprovar exatamente aquilo. Se mudar algo, gere um novo link.'],
+  ['Preciso criar conta para usar?', 'Não. Você cria e exporta orçamentos sem cadastro, e eles ficam salvos no seu navegador. A conta grátis libera a nuvem, o link de aprovação e os avisos.'],
+  ['Como o cliente aprova?', 'Você envia um link pelo WhatsApp ou e-mail. Ele abre no navegador, confere os itens e toca em aprovar ou recusar, informando o nome. Não precisa instalar nada.'],
+  ['O aceite tem validade jurídica?', 'É um aceite eletrônico simples: registra nome, data e horário. Não substitui assinatura digital certificada (ICP-Brasil) quando ela for exigida.'],
+  ['E se eu mudar o orçamento depois de enviar?', 'O link mostra uma cópia fixa do que foi enviado, para o cliente aprovar exatamente aquilo. Se mudar algo, gere um novo link.'],
+  ['Funciona no celular?', 'Sim, no navegador do celular, e pode ser instalado na tela inicial como um aplicativo.'],
 ]
 
 export function Inicio() {
@@ -47,165 +37,139 @@ export function Inicio() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-marca-50 via-fundo to-fundo">
-        <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-marca-200/40 blur-3xl" />
-        <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-violet-300/30 blur-3xl" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 lg:grid-cols-2 lg:py-24">
-          <div className="animate-entrada">
-            <span className="inline-flex items-center gap-2 rounded-full bg-superficie px-3 py-1 text-xs font-semibold text-marca-700 shadow-sm ring-1 ring-marca-100">
-              <Icone nome="check" className="h-3.5 w-3.5" /> Grátis · sem cartão de crédito
-            </span>
-            <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-balance text-slate-900 sm:text-6xl">
-              Crie orçamentos profissionais <span className="bg-gradient-to-r from-marca-600 to-violeta-600 bg-clip-text text-transparent">em minutos.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-lg text-slate-600">Organize seus clientes, personalize propostas e acompanhe aprovações em um só lugar.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/app" className="btn-primario px-6 py-3 text-base">
-                Criar orçamento grátis <Icone nome="seta" />
-              </Link>
-              <a href="#funcionalidades" className="btn-secundario px-6 py-3 text-base">
-                Conhecer funcionalidades
-              </a>
-            </div>
-            <p className="mt-4 text-sm text-slate-500">Funciona sem cadastro. Crie uma conta quando quiser salvar na nuvem.</p>
+      {/* Abertura */}
+      <section className="mx-auto max-w-6xl px-4 pt-16 pb-12 sm:pt-24">
+        <div className="max-w-3xl animate-entrada">
+          <p className="text-sm font-medium text-marca-700">Para autônomos, prestadores de serviço e pequenas empresas</p>
+          <h1 className="mt-4 font-display text-5xl leading-[1.05] tracking-tight text-slate-900 sm:text-7xl">
+            Crie orçamentos profissionais <em className="text-marca-700">em minutos.</em>
+          </h1>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">
+            Organize seus clientes, personalize propostas e acompanhe aprovações em um só lugar.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link to="/app" className="btn-primario px-5 py-2.5 text-[15px]">
+              Criar orçamento grátis
+            </Link>
+            <a href="#recursos" className="btn-secundario px-5 py-2.5 text-[15px]">
+              Conhecer funcionalidades
+            </a>
           </div>
-          <div className="relative">
-            <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-tr from-marca-200/60 to-teal-100/60 blur-2xl dark:opacity-30" />
-            <div className="relative mx-auto max-w-md animate-flutuar overflow-hidden rounded-xl shadow-2xl shadow-marca-900/20 ring-1 ring-slate-200">
-              <PreviaA4>
-                <DocumentoOrcamento orcamento={exemplo} empresa={EMPRESA_EXEMPLO} />
-              </PreviaA4>
-            </div>
-            <p className="mt-3 text-center text-xs text-slate-400">Orçamento de exemplo gerado no OrçaFácil</p>
-          </div>
+          <p className="mt-4 text-sm text-slate-500">Sem cadastro e sem cartão. Crie uma conta só quando quiser salvar na nuvem.</p>
         </div>
       </section>
 
-      {/* Benefícios */}
-      <section className="mx-auto max-w-6xl px-4 py-20" aria-labelledby="beneficios">
-        <h2 id="beneficios" className="sr-only">Benefícios</h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          {BENEFICIOS.map((b) => (
-            <div key={b.titulo} className="cartao-interativo group p-6">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-marca-500 to-violeta-600 text-white shadow-lg shadow-marca-600/25 transition duration-300 group-hover:-rotate-6 group-hover:scale-110">
-                <Icone nome={b.icone} className="h-5 w-5" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-slate-900">{b.titulo}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{b.texto}</p>
-            </div>
-          ))}
+      <section className="mx-auto max-w-6xl px-4 pb-20" aria-label="Captura de tela do editor">
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-superficie shadow-[0_24px_48px_-24px_rgba(28,25,23,0.25)]">
+          <div className="flex items-center gap-1.5 border-b border-slate-200 px-4 py-2.5" aria-hidden="true">
+            <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+            <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+            <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+            <span className="ml-3 font-mono text-[11px] text-slate-400">orcafacil.pqueirozdev.com.br/app</span>
+          </div>
+          <img
+            src="/editor.webp"
+            alt="Editor do OrçaFácil: formulário à esquerda e prévia do orçamento à direita"
+            width={1440}
+            height={900}
+            decoding="async"
+            className="w-full"
+          />
         </div>
       </section>
 
       {/* Como funciona */}
-      <section id="como-funciona" className="scroll-mt-20 bg-slate-900 py-20 text-white dark:bg-slate-50">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-center text-3xl font-bold tracking-tight dark:text-slate-900">Como funciona</h2>
-          <ol className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {PASSOS.map((p, i) => (
-              <li key={p.titulo} className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 dark:bg-superficie dark:ring-slate-200">
-                <div className="grid h-9 w-9 place-items-center rounded-full bg-marca-500 font-bold text-white">{i + 1}</div>
-                <h3 className="mt-4 text-lg font-semibold dark:text-slate-900">{p.titulo}</h3>
-                <p className="mt-1.5 text-sm text-slate-300 dark:text-slate-600">{p.texto}</p>
+      <section id="como-funciona" className="scroll-mt-20 border-y border-slate-200 bg-superficie">
+        <div className="mx-auto max-w-6xl px-4 py-20">
+          <h2 className="font-display text-4xl text-slate-900 sm:text-5xl">Do rascunho ao “aprovado”.</h2>
+          <ol className="mt-12 grid gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200 sm:grid-cols-2 lg:grid-cols-4">
+            {PASSOS.map(([titulo, texto], i) => (
+              <li key={titulo} className="bg-superficie p-6">
+                <span className="font-mono text-xs text-slate-400">0{i + 1}</span>
+                <h3 className="mt-3 text-lg font-semibold text-slate-900">{titulo}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{texto}</p>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      {/* Prévia do editor (captura real do app) */}
-      <section className="mx-auto max-w-6xl px-4 py-20" aria-labelledby="editor">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 id="editor" className="text-3xl font-bold tracking-tight text-slate-900">Editor com prévia em tempo real</h2>
-          <p className="mt-3 text-slate-600">À esquerda você preenche; à direita aparece o documento final, exatamente como vai para o PDF.</p>
-        </div>
-        <div className="mt-10 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-slate-200">
-          <img src="/editor.webp" alt="Tela do editor do OrçaFácil com o formulário à esquerda e a prévia do orçamento à direita" width={1440} height={900} loading="lazy" decoding="async" className="w-full" />
+      {/* Modelos */}
+      <section id="modelos" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
+        <div className="grid items-start gap-12 lg:grid-cols-[1fr_1.1fr]">
+          <div className="lg:sticky lg:top-24">
+            <h2 className="font-display text-4xl text-slate-900 sm:text-5xl">Cinco modelos. Todos seus.</h2>
+            <p className="mt-4 max-w-md text-slate-600">
+              Comece por um estilo e ajuste o resto: logo, cores, fonte, tamanho das fotos e a posição de cada parte.
+            </p>
+            <div role="tablist" aria-label="Modelos" className="mt-8 flex flex-col border-l border-slate-200">
+              {(Object.keys(MODELOS) as ModeloId[]).map((m) => (
+                <button
+                  key={m}
+                  role="tab"
+                  aria-selected={modelo === m}
+                  onClick={() => setModelo(m)}
+                  className={`-ml-px border-l-2 py-2.5 pl-4 text-left transition-colors ${
+                    modelo === m ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <span className="block text-sm font-medium">{MODELOS[m].nome}</span>
+                  {modelo === m && <span className="mt-0.5 block text-sm text-slate-500">{MODELOS[m].descricao}</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div key={modelo} className="mx-auto w-full max-w-lg animate-escala overflow-hidden rounded-lg border border-slate-200 shadow-[0_24px_48px_-24px_rgba(28,25,23,0.25)]">
+            <PreviaA4>
+              <DocumentoOrcamento orcamento={exemplo} empresa={{ ...EMPRESA_EXEMPLO, corTema: MODELOS[modelo].cor, layout: layoutDoModelo(modelo) }} />
+            </PreviaA4>
+          </div>
         </div>
       </section>
 
-      {/* Modelos */}
-      <section id="modelos" className="scroll-mt-20 border-y border-slate-200 bg-superficie py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900">Cinco modelos, todos personalizáveis</h2>
-            <p className="mt-3 text-slate-600">Escolha um ponto de partida e ajuste cores, fonte, tamanhos e a posição de cada parte.</p>
-          </div>
-          <div role="tablist" aria-label="Modelos" className="mt-8 flex flex-wrap justify-center gap-2">
-            {(Object.keys(MODELOS) as ModeloId[]).map((m) => (
-              <button
-                key={m}
-                role="tab"
-                aria-selected={modelo === m}
-                onClick={() => setModelo(m)}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${modelo === m ? 'bg-marca-600 text-white shadow-md shadow-marca-600/25' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-              >
-                {MODELOS[m].nome}
-              </button>
+      {/* Recursos */}
+      <section id="recursos" className="scroll-mt-20 border-t border-slate-200">
+        <div className="mx-auto max-w-6xl px-4 py-20">
+          <h2 className="font-display text-4xl text-slate-900 sm:text-5xl">O que vem junto.</h2>
+          <div className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {RECURSOS.map(([icone, titulo, texto]) => (
+              <div key={titulo}>
+                <Icone nome={icone} className="h-5 w-5 text-marca-700" />
+                <h3 className="mt-3 font-semibold text-slate-900">{titulo}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600">{texto}</p>
+              </div>
             ))}
           </div>
-          <div className="mt-8 grid items-center gap-8 md:grid-cols-[1fr_1.2fr]">
-            <div>
-              <h3 className="text-2xl font-bold text-slate-900">{MODELOS[modelo].nome}</h3>
-              <p className="mt-2 text-slate-600">{MODELOS[modelo].descricao}</p>
-              <Link to="/app" className="btn-primario mt-6">
-                Usar este modelo <Icone nome="seta" />
-              </Link>
-            </div>
-            <div key={modelo} className="mx-auto w-full max-w-md animate-escala overflow-hidden rounded-xl shadow-xl ring-1 ring-slate-200">
-              <PreviaA4>
-                <DocumentoOrcamento orcamento={exemplo} empresa={{ ...EMPRESA_EXEMPLO, corTema: MODELOS[modelo].cor, layout: layoutDoModelo(modelo) }} />
-              </PreviaA4>
-            </div>
+        </div>
+      </section>
+
+      {/* Perguntas */}
+      <section className="border-t border-slate-200" aria-labelledby="faq">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 lg:grid-cols-[1fr_1.6fr]">
+          <h2 id="faq" className="font-display text-4xl text-slate-900 sm:text-5xl">Perguntas frequentes</h2>
+          <div className="divide-y divide-slate-200 border-y border-slate-200">
+            {PERGUNTAS.map(([p, r]) => (
+              <details key={p} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-slate-900">
+                  {p}
+                  <Icone nome="mais" className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-45" />
+                </summary>
+                <p className="mt-2 pr-8 text-sm leading-relaxed text-slate-600">{r}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Funcionalidades */}
-      <section id="funcionalidades" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Tudo o que você precisa para vender mais</h2>
-          <p className="mt-3 text-slate-600">Para freelancers, autônomos, prestadores de serviço e pequenas empresas.</p>
-        </div>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {FUNCIONALIDADES.map(([icone, titulo, texto]) => (
-            <div key={titulo} className="flex gap-4 rounded-2xl p-4 transition hover:bg-superficie hover:shadow-sm">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-marca-50 text-marca-600">
-                <Icone nome={icone} className="h-5 w-5" />
-              </span>
-              <span>
-                <span className="block font-semibold text-slate-900">{titulo}</span>
-                <span className="mt-0.5 block text-sm text-slate-600">{texto}</span>
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Perguntas frequentes */}
-      <section className="mx-auto max-w-3xl px-4 pb-20" aria-labelledby="faq">
-        <h2 id="faq" className="text-center text-3xl font-bold tracking-tight text-slate-900">Perguntas frequentes</h2>
-        <div className="mt-8 divide-y divide-slate-200 rounded-2xl bg-superficie ring-1 ring-slate-200">
-          {PERGUNTAS.map(([p, r]) => (
-            <details key={p} className="group px-6 py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-slate-900">
-                {p}
-                <Icone nome="mais" className="h-4 w-4 shrink-0 text-slate-400 transition group-open:rotate-45" />
-              </summary>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{r}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA final */}
-      <section className="px-4 pb-20">
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-gradient-to-br from-marca-600 to-violeta-600 px-6 py-14 text-center text-white shadow-2xl shadow-marca-600/20">
-          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-xl" />
-          <h2 className="relative text-3xl font-bold tracking-tight">Seu próximo orçamento pode sair em 5 minutos.</h2>
-          <p className="relative mt-3 text-marca-100">Comece agora, sem cadastro e sem cartão.</p>
-          <Link to="/app" className="btn relative mt-8 bg-white px-6 py-3 text-base text-marca-700 hover:bg-marca-50">
+      {/* Chamada final */}
+      <section className="bg-slate-900 text-slate-50">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-4 py-16 sm:flex-row sm:items-center">
+          <h2 className="font-display text-4xl leading-tight sm:text-5xl">
+            Seu próximo orçamento
+            <br />
+            em cinco minutos.
+          </h2>
+          <Link to="/app" className="btn shrink-0 bg-slate-50 px-5 py-2.5 text-[15px] text-slate-900 hover:bg-slate-200">
             Criar orçamento grátis <Icone nome="seta" />
           </Link>
         </div>

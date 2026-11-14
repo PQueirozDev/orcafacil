@@ -146,7 +146,7 @@ export function Conta() {
                 }
               }}
             >
-              <Icone nome="subir" /> {importando ? 'Importando…' : 'Trazer para a conta'}
+              <Icone nome="upload" /> {importando ? 'Importando…' : 'Trazer para a conta'}
             </button>
           </Cartao>
         )}

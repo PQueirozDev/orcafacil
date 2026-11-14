@@ -43,7 +43,7 @@ function Modal({ titulo, aoFechar, children }: { titulo: string; aoFechar: () =>
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4" role="dialog" aria-modal="true" aria-labelledby="titulo-modal">
       <div className="absolute inset-0 animate-surgir bg-slate-900/50 backdrop-blur-sm" onClick={aoFechar} />
-      <div ref={caixa} className="relative max-h-[90dvh] w-full max-w-lg animate-escala overflow-y-auto rounded-3xl bg-superficie p-6 shadow-2xl">
+      <div ref={caixa} className="relative max-h-[90dvh] w-full max-w-lg animate-escala overflow-y-auto rounded-2xl bg-superficie p-6 shadow-2xl">
         <h2 id="titulo-modal" className="text-lg font-semibold text-slate-900">
           {titulo}
         </h2>
@@ -183,7 +183,7 @@ export function Clientes() {
                 role="radio"
                 aria-checked={filtro === v}
                 onClick={() => setFiltro(v)}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${filtro === v ? 'bg-marca-600 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${filtro === v ? 'bg-slate-900 text-slate-50' : 'text-slate-600 hover:bg-slate-100'}`}
               >
                 {r}
               </button>
@@ -193,7 +193,7 @@ export function Clientes() {
         <ul className="cascata divide-y divide-slate-100">
           {lista.map((c, i) => (
             <li key={c.uid} style={{ '--i': i } as CSSProperties} className="flex items-center gap-3 px-4 py-3 transition hover:bg-slate-50 sm:gap-4">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-marca-50 font-semibold text-marca-700">{c.nome.slice(0, 1).toUpperCase()}</div>
+              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600">{c.nome.slice(0, 1).toUpperCase()}</div>
               <button className="min-w-0 flex-1 text-left" onClick={() => setHistorico(c)}>
                 <span className="block truncate font-medium text-slate-900">{c.nome}</span>
                 <span className="block truncate text-xs text-slate-500">{[c.telefone, c.email, c.documento].filter(Boolean).join(' · ') || 'Sem contato'}</span>
@@ -212,7 +212,7 @@ export function Clientes() {
           ))}
           {lista.length === 0 && (
             <li className="flex flex-col items-center px-4 py-14 text-center">
-              <span className="grid h-14 w-14 animate-flutuar place-items-center rounded-2xl bg-marca-50 text-marca-600 ring-1 ring-marca-100">
+              <span className="grid h-12 w-12 place-items-center rounded-xl border border-slate-200 text-slate-500">
                 <Icone nome="clientes" className="h-7 w-7" />
               </span>
               <span className="mt-4 font-semibold text-slate-900">{clientes.length ? 'Nenhum cliente encontrado' : 'Nenhum cliente cadastrado ainda'}</span>

@@ -169,10 +169,10 @@ export function Configuracoes() {
           <Grupo titulo="Backup" descricao={usuario ? 'Seus dados já ficam na nuvem. O arquivo serve como cópia extra.' : 'Seus dados ficam neste navegador. Exporte para guardar ou levar a outro computador.'}>
             <div className="flex flex-col gap-2">
               <button className="btn-secundario" onClick={() => void exportarBackup()}>
-                <Icone nome="baixar" /> Exportar backup (.json)
+                <Icone nome="download" /> Exportar backup (.json)
               </button>
               <button className="btn-secundario" onClick={() => arquivoBackup.current?.click()}>
-                <Icone nome="subir" /> Importar backup
+                <Icone nome="upload" /> Importar backup
               </button>
               <input ref={arquivoBackup} type="file" accept="application/json,.json" hidden onChange={(e) => void importar(e.target.files?.[0])} />
             </div>

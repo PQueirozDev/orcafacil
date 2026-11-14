@@ -27,7 +27,7 @@ function aplicar() {
   const escuro = escuroEfetivo()
   document.documentElement.classList.toggle('dark', escuro)
   document.documentElement.style.colorScheme = escuro ? 'dark' : 'light'
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', escuro ? '#0b1020' : '#4f46e5')
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', escuro ? '#1c1917' : '#f7f6f2')
   ouvintes.forEach((f) => f())
 }
 

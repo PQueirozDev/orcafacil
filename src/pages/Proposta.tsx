@@ -21,10 +21,10 @@ const MOTIVOS: Record<string, string> = {
 function Mensagem({ icone, cor, titulo, texto }: { icone: string; cor: string; titulo: string; texto: string }) {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center px-4 py-24 text-center">
-      <div className={`grid h-16 w-16 place-items-center rounded-3xl text-white shadow-xl ${cor}`}>
+      <div className={`grid h-16 w-16 place-items-center rounded-2xl text-white shadow-xl ${cor}`}>
         <Icone nome={icone} className="h-8 w-8" />
       </div>
-      <h1 className="mt-6 text-2xl font-bold text-slate-900">{titulo}</h1>
+      <h1 className="mt-6 text-2xl font-semibold text-slate-900">{titulo}</h1>
       <p className="mt-2 text-slate-500">{texto}</p>
     </div>
   )
@@ -97,8 +97,8 @@ export function Proposta() {
     return (
       <div aria-busy="true" className="mx-auto max-w-5xl space-y-4 px-4 py-10">
         <span className="sr-only">Carregando proposta…</span>
-        <div className="h-24 animate-pulse rounded-2xl bg-slate-200/60" />
-        <div className="h-[60vh] animate-pulse rounded-2xl bg-slate-200/50" />
+        <div className="h-24 animate-pulse rounded-xl bg-slate-200/60" />
+        <div className="h-[60vh] animate-pulse rounded-xl bg-slate-200/50" />
       </div>
     )
   if (dados.estado === 'limite') return <Mensagem icone="relogio" cor="bg-amber-500" titulo="Aguarde um instante" texto={MOTIVOS.limite} />
@@ -117,7 +117,7 @@ export function Proposta() {
             {e.logo ? (
               <img src={e.logo} alt="" className="h-10 w-auto max-w-28 rounded-lg bg-white object-contain p-0.5" />
             ) : (
-              <span className="grid h-10 w-10 place-items-center rounded-xl font-bold text-white" style={{ background: cor }}>
+              <span className="grid h-10 w-10 place-items-center rounded-xl font-semibold text-white" style={{ background: cor }}>
                 {(e.nome || 'E').slice(0, 1).toUpperCase()}
               </span>
             )}
@@ -133,7 +133,7 @@ export function Proposta() {
       <main className="nao-imprimir mx-auto max-w-5xl px-4 py-6 sm:py-10">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
           <div className="order-2 min-w-0 lg:order-1">
-            <div className="overflow-hidden rounded-2xl bg-slate-200/70 p-2 sm:p-3">
+            <div className="overflow-hidden rounded-xl bg-slate-200/70 p-2 sm:p-3">
               <PreviaA4>
                 <DocumentoOrcamento orcamento={o} empresa={e} />
               </PreviaA4>
@@ -143,7 +143,7 @@ export function Proposta() {
           <aside className="order-1 space-y-4 lg:order-2">
             <div className="cartao p-5">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{o.titulo || 'Proposta comercial'}</p>
-              <p className="mt-1 text-3xl font-extrabold tabular-nums text-slate-900">{formatarMoeda(total)}</p>
+              <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">{formatarMoeda(total)}</p>
               <p className="mt-1 text-sm text-slate-500">
                 Para {o.cliente.nome || 'você'} · emitida em {formatarData(o.criadoEm)}
               </p>
@@ -158,7 +158,7 @@ export function Proposta() {
                     document.title = anterior
                   }}
                 >
-                  <Icone nome="baixar" /> Baixar PDF
+                  <Icone nome="download" /> Baixar PDF
                 </button>
               )}
             </div>
@@ -219,7 +219,7 @@ export function Proposta() {
                     Voltar
                   </button>
                   <button
-                    className={modo === 'aprovar' ? 'btn bg-emerald-600 text-white shadow-md shadow-emerald-600/25 hover:bg-emerald-700' : 'btn bg-rose-600 text-white hover:bg-rose-700'}
+                    className={modo === 'aprovar' ? 'btn bg-emerald-600 text-white hover:bg-emerald-700' : 'btn bg-rose-600 text-white hover:bg-rose-700'}
                     disabled={enviando}
                   >
                     {enviando ? 'Enviando…' : modo === 'aprovar' ? 'Confirmar aprovação' : 'Confirmar recusa'}
@@ -233,7 +233,7 @@ export function Proposta() {
             ) : (
               <div className="cartao space-y-2 p-5">
                 <p className="text-sm text-slate-600">Revise a proposta e responda:</p>
-                <button className="btn w-full bg-emerald-600 py-3 text-white shadow-md shadow-emerald-600/25 hover:bg-emerald-700" onClick={() => setModo('aprovar')}>
+                <button className="btn w-full bg-emerald-600 py-3 text-white hover:bg-emerald-700" onClick={() => setModo('aprovar')}>
                   <Icone nome="check" /> Aprovar proposta
                 </button>
                 <button className="btn-secundario w-full" onClick={() => setModo('recusar')}>

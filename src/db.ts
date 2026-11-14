@@ -303,7 +303,7 @@ export const EMPRESA_PADRAO: Empresa = {
   endereco: '',
   site: '',
   responsavel: '',
-  corTema: '#4f46e5',
+  corTema: '#1f6a58',
   proximoNumero: 1,
   validadePadraoDias: 15,
   condicoesPadrao: '',

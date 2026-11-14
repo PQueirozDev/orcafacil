@@ -55,7 +55,7 @@ export function orcamentoExemplo(numero = 42): Orcamento {
         quantidade: 3.2,
         unidade: 'm',
         valorUnitario: 1250,
-        foto: fotoExemplo('#99f6e4', '#0f766e', 'armario'),
+        foto: fotoExemplo('#e7e5e4', '#a8a29e', 'armario'),
       },
       {
         id: novoId(),
@@ -64,7 +64,7 @@ export function orcamentoExemplo(numero = 42): Orcamento {
         quantidade: 2.8,
         unidade: 'm',
         valorUnitario: 1480,
-        foto: fotoExemplo('#fde68a', '#b45309', 'bancada'),
+        foto: fotoExemplo('#efe9df', '#c4b49a', 'bancada'),
       },
       {
         id: novoId(),
@@ -76,8 +76,8 @@ export function orcamentoExemplo(numero = 42): Orcamento {
       },
     ],
     fotos: [
-      { id: novoId(), src: fotoExemplo('#a5f3fc', '#0e7490', 'cozinha'), legenda: 'Projeto 3D — vista geral' },
-      { id: novoId(), src: fotoExemplo('#ddd6fe', '#6d28d9', 'sala'), legenda: 'Ambiente integrado à sala' },
+      { id: novoId(), src: fotoExemplo('#dfe7e2', '#8fa99d', 'cozinha'), legenda: 'Projeto 3D — vista geral' },
+      { id: novoId(), src: fotoExemplo('#ece6dc', '#b5a68c', 'sala'), legenda: 'Ambiente integrado à sala' },
     ],
     descontoTipo: 'percentual',
     desconto: 5,

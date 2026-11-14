@@ -7,7 +7,7 @@ import { db, EMPRESA_PADRAO, layoutDe, normalizarEmpresa, SECOES, type Empresa, 
 import { EMPRESA_EXEMPLO, orcamentoExemplo } from '../../lib/exemplo'
 import { layoutDoModelo, MODELOS } from '../../lib/modelos'
 
-const CORES = ['#4f46e5', '#0f766e', '#0369a1', '#b91c1c', '#c2410c', '#a16207', '#7e22ce', '#db2777', '#1e293b']
+const CORES = ['#1f6a58', '#4f46e5', '#0f766e', '#0369a1', '#b91c1c', '#c2410c', '#a16207', '#7e22ce', '#db2777', '#1e293b']
 
 function Grupo({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
@@ -137,8 +137,8 @@ export function ModeloOrcamento() {
               key={m}
               aria-pressed={ativo}
               onClick={() => aplicar({ ...empresa, corTema: MODELOS[m].cor, layout: layoutDoModelo(m) })}
-              className={`group overflow-hidden rounded-2xl border-2 bg-superficie text-left transition duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
-                ativo ? 'border-marca-500 shadow-lg shadow-marca-600/15' : 'border-slate-200'
+              className={`group overflow-hidden rounded-xl border-2 bg-superficie text-left transition duration-300 ${
+                ativo ? 'border-slate-900' : 'border-slate-200 hover:border-slate-300'
               }`}
             >
               <div className="pointer-events-none h-36 overflow-hidden bg-slate-100 p-2" aria-hidden="true">

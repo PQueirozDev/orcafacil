@@ -136,7 +136,7 @@ function PainelCompartilhar({ orc }: { orc: Orcamento }) {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <a
-              className="btn bg-[#25d366] text-white shadow-md shadow-emerald-600/20 hover:bg-[#1fb757]"
+              className="btn bg-[#25d366] text-white hover:bg-[#1fb757]"
               href={`https://wa.me/${telefoneWhatsApp(orc.cliente.telefone)}?text=${encodeURIComponent(texto(urlDaProposta(ativo.token)))}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -301,7 +301,7 @@ export function VisualizarOrcamento() {
           </Link>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Orçamento {formatarNumero(orc.numero)}</h1>
+              <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Orçamento {formatarNumero(orc.numero)}</h1>
               <SeloStatus status={statusExibido(orc)} />
             </div>
             <p className="truncate text-sm text-slate-500">
@@ -314,7 +314,7 @@ export function VisualizarOrcamento() {
             <Icone nome="editar" /> Editar
           </Link>
           <button className="btn-primario" onClick={() => imprimirOrcamento(orc)}>
-            <Icone nome="baixar" /> Baixar PDF
+            <Icone nome="download" /> Baixar PDF
           </button>
         </div>
       </div>

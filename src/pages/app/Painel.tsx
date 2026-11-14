@@ -110,11 +110,11 @@ export function Painel() {
     })
     const cores: Record<StatusExibido, string> = {
       rascunho: 'bg-slate-400',
-      pendente: 'bg-sky-500',
-      visualizado: 'bg-marca-500',
+      pendente: 'bg-amber-500',
+      visualizado: 'bg-sky-700',
       aprovado: 'bg-emerald-500',
       recusado: 'bg-rose-500',
-      expirado: 'bg-amber-500',
+      expirado: 'bg-slate-500',
       cancelado: 'bg-slate-300',
     }
     const distribuicao = (Object.keys(ROTULO_STATUS) as StatusExibido[]).map((s) => ({
@@ -173,7 +173,7 @@ export function Painel() {
       />
 
       {visitante && visitante.orcamentos > 0 && !visitante.importado && (
-        <div className="mb-6 flex flex-col gap-3 rounded-2xl bg-marca-50 p-4 text-sm text-marca-800 ring-1 ring-marca-100 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-6 flex flex-col gap-3 rounded-xl bg-marca-50 p-4 text-sm text-marca-800 ring-1 ring-marca-100 sm:flex-row sm:items-center sm:justify-between">
           <p>
             Encontramos <strong>{visitante.orcamentos} orçamento(s)</strong> criados neste navegador antes de você entrar.
           </p>
@@ -183,8 +183,7 @@ export function Painel() {
 
       {orcamentos.length === 0 ? (
         <div className="cartao relative flex flex-col items-center overflow-hidden px-6 py-16 text-center">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-marca-50 to-transparent" />
-          <div className="relative grid h-16 w-16 animate-flutuar place-items-center rounded-3xl bg-superficie text-marca-600 shadow-xl shadow-marca-600/15 ring-1 ring-marca-100">
+          <div className="grid h-12 w-12 place-items-center rounded-xl border border-slate-200 text-slate-500">
             <Icone nome="documento" className="h-8 w-8" />
           </div>
           <h2 className="mt-5 text-lg font-semibold text-slate-900">Crie seu primeiro orçamento</h2>
@@ -265,19 +264,19 @@ export function Painel() {
 
           <div className="cascata mb-6 grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             {[
-              { rotulo: 'Orçamentos', valor: String(resumo.total), detalhe: `${resumo.pendentes} aguardando resposta`, icone: 'documento', cor: 'from-marca-500 to-violeta-600' },
-              { rotulo: 'Valor total', valor: formatarMoeda(resumo.valorTotal), detalhe: 'sem os cancelados', icone: 'painel', cor: 'from-sky-500 to-cyan-500' },
-              { rotulo: 'Valor aprovado', valor: formatarMoeda(resumo.valorAprovado), detalhe: `${resumo.aprovados} aprovados · ${resumo.recusados} recusados`, icone: 'check', cor: 'from-emerald-500 to-teal-500' },
-              { rotulo: 'Taxa de aprovação', valor: resumo.taxa == null ? '—' : `${resumo.taxa}%`, detalhe: 'entre os já respondidos', icone: 'raio', cor: 'from-amber-500 to-orange-500' },
+              { rotulo: 'Orçamentos', valor: String(resumo.total), detalhe: `${resumo.pendentes} aguardando resposta`, icone: 'documento' },
+              { rotulo: 'Valor total', valor: formatarMoeda(resumo.valorTotal), detalhe: 'sem os cancelados', icone: 'painel' },
+              { rotulo: 'Valor aprovado', valor: formatarMoeda(resumo.valorAprovado), detalhe: `${resumo.aprovados} aprovados · ${resumo.recusados} recusados`, icone: 'check' },
+              { rotulo: 'Taxa de aprovação', valor: resumo.taxa == null ? '—' : `${resumo.taxa}%`, detalhe: 'entre os já respondidos', icone: 'grafico' },
             ].map((c, i) => (
-              <div key={c.rotulo} style={{ '--i': i } as CSSProperties} className="cartao-interativo flex items-center gap-3 p-4 sm:gap-4 sm:p-5">
-                <span className={`hidden h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-lg sm:grid ${c.cor}`}>
-                  <Icone nome={c.icone} className="h-5 w-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-xs font-medium text-slate-500">{c.rotulo}</span>
-                  <span className="block truncate text-lg font-bold tracking-tight tabular-nums text-slate-900 sm:text-xl">{c.valor}</span>
-                  <span className="block truncate text-[11px] text-slate-400">{c.detalhe}</span>
+              <div key={c.rotulo} style={{ '--i': i } as CSSProperties} className="cartao flex p-4 sm:p-5">
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center justify-between gap-2 text-[13px] text-slate-500">
+                    {c.rotulo}
+                    <Icone nome={c.icone} className="h-4 w-4 shrink-0 text-slate-400" />
+                  </span>
+                  <span className="mt-2 block truncate text-xl font-semibold tracking-tight tabular-nums text-slate-900 sm:text-2xl">{c.valor}</span>
+                  <span className="mt-0.5 block truncate text-xs text-slate-500">{c.detalhe}</span>
                 </span>
               </div>
             ))}
@@ -315,8 +314,8 @@ export function Painel() {
                       setStatus(s)
                       setPagina(1)
                     }}
-                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition duration-200 ${
-                      status === s ? 'bg-marca-600 text-white shadow-md shadow-marca-600/25' : 'text-slate-600 hover:bg-slate-100'
+                    className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                      status === s ? 'bg-slate-900 text-slate-50' : 'text-slate-600 hover:bg-slate-100'
                     }`}
                   >
                     {s === 'todos' ? 'Todos' : ROTULO_STATUS[s]}
@@ -361,7 +360,7 @@ export function Painel() {
                       <Icone nome="editar" />
                     </Link>
                     <Link to={`/app/orcamentos/${o.id}/visualizar?pdf=1`} aria-label={`Exportar PDF de ${formatarNumero(o.numero)}`} title="Exportar PDF" className={botaoAcao}>
-                      <Icone nome="baixar" />
+                      <Icone nome="download" />
                     </Link>
                     <button
                       aria-label={`Duplicar ${formatarNumero(o.numero)}`}

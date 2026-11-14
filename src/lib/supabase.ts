@@ -16,7 +16,22 @@ export const supabase: SupabaseClient | null =
     : null
 
 export const nuvemDisponivel = supabase !== null
-export const loginGoogleAtivo = import.meta.env.VITE_LOGIN_GOOGLE === 'true'
+
+let provedores: Promise<{ google: boolean }> | null = null
+
+/**
+ * Pergunta ao Supabase quais logins externos estão ativos. O botão do Google só aparece
+ * quando o provedor estiver configurado no painel (ou forçado com VITE_LOGIN_GOOGLE=true).
+ */
+export function provedoresAtivos(): Promise<{ google: boolean }> {
+  if (import.meta.env.VITE_LOGIN_GOOGLE === 'true') return Promise.resolve({ google: true })
+  if (!url || !chave) return Promise.resolve({ google: false })
+  provedores ??= fetch(`${url}/auth/v1/settings`, { headers: { apikey: chave } })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d) => ({ google: !!d?.external?.google }))
+    .catch(() => ({ google: false }))
+  return provedores
+}
 
 /** Traduz mensagens de erro comuns do Supabase Auth. */
 export function mensagemDeErro(e: unknown): string {

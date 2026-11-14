@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { cadastrar, entrar, entrarComGoogle, problemaNaSenha, recuperarSenha, redefinirSenha, reenviarConfirmacao, useAuth } from '../auth'
 import { AlternarTema } from '../components/Layouts'
 import { Campo, Icone, Marca } from '../components/ui'
-import { loginGoogleAtivo, mensagemDeErro, nuvemDisponivel } from '../lib/supabase'
+import { mensagemDeErro, nuvemDisponivel, provedoresAtivos } from '../lib/supabase'
 
 type Modo = 'entrar' | 'cadastrar' | 'recuperar'
 
@@ -20,22 +20,21 @@ function Moldura({ children }: { children: React.ReactNode }) {
         </div>
         <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-10">{children}</main>
       </div>
-      <div className="relative hidden overflow-hidden bg-gradient-to-br from-marca-600 to-violeta-600 p-12 text-white lg:flex lg:flex-col lg:justify-center">
-        <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-white/10 blur-2xl" />
-        <div className="relative mx-auto max-w-md">
-          <h2 className="text-3xl font-bold leading-snug">Orçamentos profissionais e aprovação online, no mesmo lugar.</h2>
-          <ul className="mt-8 space-y-3 text-marca-100">
-            {['Seus orçamentos salvos na nuvem', 'Link para o cliente aprovar pelo celular', 'Aviso assim que o cliente responder', 'Grátis para começar, sem cartão'].map((t) => (
+      <aside className="hidden border-l border-slate-200 bg-slate-900 p-12 text-slate-50 lg:flex lg:flex-col lg:justify-between">
+        <span className="font-mono text-xs text-slate-400">orçafácil</span>
+        <div className="max-w-md">
+          <p className="font-display text-4xl leading-tight">Orçamento enviado de manhã, aprovado antes do almoço.</p>
+          <ul className="mt-10 space-y-3 text-sm text-slate-300">
+            {['Orçamentos salvos na nuvem, em todos os aparelhos', 'Link para o cliente aprovar pelo celular', 'Aviso assim que o cliente responder', 'Grátis para começar, sem cartão'].map((t) => (
               <li key={t} className="flex items-center gap-3">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-white/15">
-                  <Icone nome="check" className="h-3.5 w-3.5" />
-                </span>
+                <Icone nome="check" className="h-4 w-4 text-marca-400" />
                 {t}
               </li>
             ))}
           </ul>
         </div>
-      </div>
+        <span className="text-xs text-slate-500">Seus dados ficam protegidos: cada conta só acessa o que é seu.</span>
+      </aside>
     </div>
   )
 }
@@ -52,15 +51,20 @@ export function Entrar() {
   const [erro, setErro] = useState('')
   const [aviso, setAviso] = useState<'confirmar' | 'recuperar' | null>(null)
   const voltar = destinoSeguro(params.get('voltar'))
+  const [loginGoogleAtivo, setLoginGoogleAtivo] = useState(false)
 
   useEffect(() => {
     setErro('')
   }, [modo])
 
+  useEffect(() => {
+    void provedoresAtivos().then((p) => setLoginGoogleAtivo(p.google))
+  }, [])
+
   if (!nuvemDisponivel) {
     return (
       <Moldura>
-        <h1 className="text-2xl font-bold text-slate-900">Contas indisponíveis</h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Contas indisponíveis</h1>
         <p className="mt-2 text-sm text-slate-500">Este ambiente não está conectado à nuvem. Você pode usar o app normalmente no modo visitante.</p>
         <Link to="/app" className="btn-primario mt-6">Abrir o app</Link>
       </Moldura>
@@ -101,10 +105,10 @@ export function Entrar() {
   if (aviso) {
     return (
       <Moldura>
-        <div className="grid h-14 w-14 place-items-center rounded-2xl bg-marca-50 text-marca-600 ring-1 ring-marca-100">
+        <div className="grid h-12 w-12 place-items-center rounded-xl border border-slate-200 text-slate-500">
           <Icone nome="email" className="h-7 w-7" />
         </div>
-        <h1 className="mt-6 text-2xl font-bold text-slate-900">Confira seu e-mail</h1>
+        <h1 className="mt-6 font-display text-4xl text-slate-900">Confira seu e-mail</h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           {aviso === 'confirmar'
             ? <>Enviamos um link de confirmação para <strong>{email}</strong>. Abra o link para ativar sua conta e entrar.</>
@@ -142,7 +146,7 @@ export function Entrar() {
 
   return (
     <Moldura>
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900">{titulos[modo]}</h1>
+      <h1 className="font-display text-4xl text-slate-900">{titulos[modo]}</h1>
       <p className="mt-1 text-sm text-slate-500">
         {modo === 'entrar' && <>Ainda não tem conta? <button className="font-semibold text-marca-600 hover:text-marca-700" onClick={() => setModo('cadastrar')}>Cadastre-se grátis</button></>}
         {modo === 'cadastrar' && <>Já tem conta? <button className="font-semibold text-marca-600 hover:text-marca-700" onClick={() => setModo('entrar')}>Entrar</button></>}
@@ -214,7 +218,7 @@ export function Entrar() {
         )}
       </form>
 
-      <div className="mt-8 rounded-xl bg-slate-100 p-4 text-sm text-slate-600">
+      <div className="mt-8 border-t border-slate-200 pt-6 text-sm text-slate-600">
         Prefere não criar conta agora?{' '}
         <Link to="/app" className="font-semibold text-marca-600 hover:text-marca-700">
           Use sem cadastro
@@ -256,13 +260,13 @@ export function RedefinirSenha() {
         <p className="text-sm text-slate-500">Validando o link…</p>
       ) : !usuario ? (
         <>
-          <h1 className="text-2xl font-bold text-slate-900">Link inválido ou expirado</h1>
+          <h1 className="text-2xl font-semibold text-slate-900">Link inválido ou expirado</h1>
           <p className="mt-2 text-sm text-slate-500">Peça um novo link de redefinição de senha.</p>
           <Link to="/entrar" className="btn-primario mt-6">Voltar para entrar</Link>
         </>
       ) : (
         <>
-          <h1 className="text-2xl font-bold text-slate-900">Crie uma nova senha</h1>
+          <h1 className="text-2xl font-semibold text-slate-900">Crie uma nova senha</h1>
           <p className="mt-1 text-sm text-slate-500">Para a conta {usuario.email}.</p>
           <form onSubmit={enviar} className="mt-8 space-y-4" noValidate>
             <Campo rotulo="Nova senha" type="password" autoComplete="new-password" value={senha} onChange={(e) => setSenha(e.target.value)} dica="Mínimo de 8 caracteres, com letras e números." autoFocus />
