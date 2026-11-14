@@ -47,8 +47,15 @@ export function Proposta() {
     const meta = document.createElement('meta')
     meta.name = 'robots'
     meta.content = 'noindex, nofollow'
-    document.head.appendChild(meta)
-    return () => meta.remove()
+    // O token está na URL: não pode vazar para outros sites via cabeçalho Referer
+    const referrer = document.createElement('meta')
+    referrer.name = 'referrer'
+    referrer.content = 'no-referrer'
+    document.head.append(meta, referrer)
+    return () => {
+      meta.remove()
+      referrer.remove()
+    }
   }, [])
 
   useEffect(() => {

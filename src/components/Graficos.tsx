@@ -29,7 +29,7 @@ export function GraficoBarras({
         {legenda && (
           <span className="flex gap-3 text-xs text-slate-500">
             <span className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-sm bg-marca-200" /> {legenda[0]}
+              <span className="h-2.5 w-2.5 rounded-sm bg-marca-300" /> {legenda[0]}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-sm bg-marca-600" /> {legenda[1]}
@@ -49,7 +49,7 @@ export function GraficoBarras({
               </span>
               <div className="relative w-full max-w-10 flex-1">
                 <div
-                  className="absolute inset-x-0 bottom-0 origin-bottom animate-[crescer_0.6s_cubic-bezier(0.22,1,0.36,1)_both] rounded-t-md bg-marca-200"
+                  className="absolute inset-x-0 bottom-0 origin-bottom animate-[crescer_0.6s_cubic-bezier(0.22,1,0.36,1)_both] rounded-t-md bg-marca-300"
                   style={{ height: `${(d.valor / max) * 100}%` }}
                 />
                 {d.destaque != null && (
