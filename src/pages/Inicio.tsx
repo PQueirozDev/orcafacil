@@ -6,155 +6,174 @@ import { Icone } from '../components/ui'
 import type { ModeloId } from '../db'
 import { EMPRESA_EXEMPLO, orcamentoExemplo } from '../lib/exemplo'
 import { layoutDoModelo, MODELOS } from '../lib/modelos'
+import { nuvemDisponivel } from '../lib/supabase'
 
 const PASSOS = [
-  ['Monte', 'Cliente, itens com foto, desconto e impostos. A prévia acompanha cada tecla.'],
+  ['Monte', 'Cliente, itens com foto, desconto e impostos. A prévia acompanha o que você digita.'],
   ['Personalize', 'Escolha um dos cinco modelos e ajuste cor, fonte e a ordem das seções.'],
   ['Envie', 'Mande o link pelo WhatsApp ou e-mail, ou baixe o PDF em A4.'],
-  ['Acompanhe', 'O cliente aprova pelo celular. O status muda no painel e você é avisado.'],
+  ['Receba o “sim”', 'O cliente aprova pelo celular. O status muda no painel e você é avisado.'],
 ]
 
 const RECURSOS = [
-  ['foto', 'Fotos no orçamento', 'Uma por item ou uma galeria inteira: produto, local, projeto.'],
-  ['link', 'Aprovação por link', 'Link seguro com validade e revogação. O cliente responde sem criar conta.'],
-  ['grafico', 'Painel de vendas', 'Valores propostos e aprovados por mês, taxa de aprovação e filtros.'],
-  ['clientes', 'Clientes e histórico', 'Cadastre uma vez, preencha com um clique e veja tudo o que já foi proposto.'],
-  ['sino', 'Avisos', 'Saiba quando uma proposta é aprovada, recusada ou está perto de vencer.'],
-  ['nuvem', 'Nuvem e offline', 'Com conta, sincroniza entre aparelhos. Sem internet, continua salvando.'],
+  ['Fotos no orçamento', 'Uma por item ou uma galeria: produto, local, projeto.'],
+  ['Aprovação por link', 'Validade, revogação e decisão registrada com nome, data e hora.'],
+  ['Painel de vendas', 'Valores propostos e aprovados por mês e taxa de aprovação.'],
+  ['Clientes', 'Cadastre uma vez, preencha com um clique e veja o histórico.'],
+  ['Avisos', 'Proposta aprovada, recusada ou perto de vencer.'],
+  ['Nuvem e offline', 'Sincroniza entre aparelhos e continua salvando sem internet.'],
 ]
 
 const PERGUNTAS = [
-  ['Preciso criar conta?', 'Sim, uma conta grátis com e-mail (ou Google). Assim seus orçamentos ficam salvos na nuvem, aparecem em todos os seus aparelhos e você pode enviar links de aprovação.'],
-  ['Como o cliente aprova?', 'Você envia um link pelo WhatsApp ou e-mail. Ele abre no navegador, confere os itens e toca em aprovar ou recusar, informando o nome. Não precisa instalar nada.'],
+  ['Quanto custa?', 'Nada. Crie sua conta grátis com e-mail ou Google, sem cartão.'],
+  ['Como o cliente aprova?', 'Você envia um link pelo WhatsApp ou e-mail. Ele abre no navegador, confere os itens e toca em aprovar ou recusar, informando o nome. Não precisa instalar nada nem criar conta.'],
   ['O aceite tem validade jurídica?', 'É um aceite eletrônico simples: registra nome, data e horário. Não substitui assinatura digital certificada (ICP-Brasil) quando ela for exigida.'],
   ['E se eu mudar o orçamento depois de enviar?', 'O link mostra uma cópia fixa do que foi enviado, para o cliente aprovar exatamente aquilo. Se mudar algo, gere um novo link.'],
-  ['Funciona no celular?', 'Sim, no navegador do celular, e pode ser instalado na tela inicial como um aplicativo.'],
+  ['Funciona no celular?', 'Sim, no navegador do celular, e pode ser instalado na tela inicial como aplicativo.'],
 ]
+
+/** Carimbo de "aprovado" sobre o documento de exemplo. */
+function Carimbo() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute right-4 top-[46%] z-10 -rotate-12 border-[3px] border-emerald-700 px-4 py-1.5 font-display text-3xl font-bold tracking-widest text-emerald-700 uppercase opacity-90 mix-blend-multiply sm:right-10 sm:text-4xl"
+    >
+      Aprovado
+      <span className="block text-center font-mono text-[10px] tracking-normal normal-case">por Mariana Souza · 14/11 · 10:42</span>
+    </div>
+  )
+}
 
 export function Inicio() {
   const exemplo = useMemo(() => orcamentoExemplo(), [])
   const [modelo, setModelo] = useState<ModeloId>('moderno')
+  const cadastro = nuvemDisponivel ? '/entrar?modo=cadastrar' : '/app'
 
   return (
     <>
       {/* Abertura */}
-      <section className="mx-auto max-w-6xl px-4 pt-16 pb-12 sm:pt-24">
-        <div className="max-w-3xl animate-entrada">
-          <p className="text-sm font-medium text-marca-700">Para autônomos, prestadores de serviço e pequenas empresas</p>
-          <h1 className="mt-4 font-display text-5xl leading-[1.05] tracking-tight text-slate-900 sm:text-7xl">
-            Crie orçamentos profissionais <em className="text-marca-700">em minutos.</em>
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">
-            Organize seus clientes, personalize propostas e acompanhe aprovações em um só lugar.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link to="/entrar?modo=cadastrar" className="btn-primario px-5 py-2.5 text-[15px]">
-              Criar conta grátis
-            </Link>
-            <a href="#recursos" className="btn-secundario px-5 py-2.5 text-[15px]">
-              Conhecer funcionalidades
-            </a>
+      <section className="papel-quadriculado border-b border-slate-900">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 lg:grid-cols-[1.15fr_1fr] lg:py-20">
+          <div className="animate-entrada">
+            <p className="etiqueta">Orçamentos · propostas · aprovação</p>
+            <h1 className="mt-4 font-display text-[3.4rem] leading-[0.95] font-bold tracking-tight text-slate-900 uppercase sm:text-[5.2rem]">
+              Crie orçamentos profissionais <span className="grifo">em minutos.</span>
+            </h1>
+            <p className="mt-6 max-w-md text-lg text-slate-700">Organize seus clientes, personalize propostas e acompanhe aprovações em um só lugar.</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to={cadastro} className="btn-destaque px-5 py-3 text-[15px]">
+                Criar conta grátis <Icone nome="seta" />
+              </Link>
+              <a href="#como-funciona" className="btn-secundario px-5 py-3 text-[15px]">
+                Conhecer funcionalidades
+              </a>
+            </div>
+            <p className="mt-4 font-mono text-xs text-slate-500">grátis · sem cartão · entre com e-mail ou Google</p>
           </div>
-          <p className="mt-4 text-sm text-slate-500">Grátis e sem cartão. Entre com e-mail ou com sua conta Google.</p>
-        </div>
-      </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-20" aria-label="Captura de tela do editor">
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-superficie shadow-[0_24px_48px_-24px_rgba(28,25,23,0.25)]">
-          <div className="flex items-center gap-1.5 border-b border-slate-200 px-4 py-2.5" aria-hidden="true">
-            <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
-            <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
-            <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
-            <span className="ml-3 font-mono text-[11px] text-slate-400">orcafacil.pqueirozdev.com.br/app</span>
+          <div className="relative mx-auto w-full max-w-md">
+            <div className="relative rotate-[1.5deg] border border-slate-900 bg-white shadow-[6px_6px_0_0_var(--color-slate-900)]">
+              <PreviaA4>
+                <DocumentoOrcamento orcamento={exemplo} empresa={EMPRESA_EXEMPLO} />
+              </PreviaA4>
+            </div>
+            <Carimbo />
           </div>
-          <img
-            src="/editor.webp"
-            alt="Editor do OrçaFácil: formulário à esquerda e prévia do orçamento à direita"
-            width={1440}
-            height={900}
-            decoding="async"
-            className="w-full"
-          />
         </div>
       </section>
 
       {/* Como funciona */}
-      <section id="como-funciona" className="scroll-mt-20 border-y border-slate-200 bg-superficie">
-        <div className="mx-auto max-w-6xl px-4 py-20">
-          <h2 className="font-display text-4xl text-slate-900 sm:text-5xl">Do rascunho ao “aprovado”.</h2>
-          <ol className="mt-12 grid gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200 sm:grid-cols-2 lg:grid-cols-4">
+      <section id="como-funciona" className="scroll-mt-14 border-b border-slate-900">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <h2 className="font-display text-4xl font-bold tracking-tight text-slate-900 uppercase sm:text-5xl">Do rascunho ao “aprovado”</h2>
+          <ol className="mt-10 grid border-t-2 border-slate-900 sm:grid-cols-2 lg:grid-cols-4">
             {PASSOS.map(([titulo, texto], i) => (
-              <li key={titulo} className="bg-superficie p-6">
-                <span className="font-mono text-xs text-slate-400">0{i + 1}</span>
-                <h3 className="mt-3 text-lg font-semibold text-slate-900">{titulo}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{texto}</p>
+              <li key={titulo} className="border-b border-slate-300 py-6 pr-6 lg:border-b-0 lg:border-r lg:pl-6 lg:first:pl-0 lg:last:border-r-0">
+                <span className="font-mono text-sm font-semibold text-marca-600">{String(i + 1).padStart(2, '0')}</span>
+                <h3 className="mt-2 text-lg font-semibold text-slate-900">{titulo}</h3>
+                <p className="mt-1 text-sm text-slate-600">{texto}</p>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      {/* Modelos */}
-      <section id="modelos" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
-        <div className="grid items-start gap-12 lg:grid-cols-[1fr_1.1fr]">
-          <div className="lg:sticky lg:top-24">
-            <h2 className="font-display text-4xl text-slate-900 sm:text-5xl">Cinco modelos. Todos seus.</h2>
-            <p className="mt-4 max-w-md text-slate-600">
-              Comece por um estilo e ajuste o resto: logo, cores, fonte, tamanho das fotos e a posição de cada parte.
-            </p>
-            <div role="tablist" aria-label="Modelos" className="mt-8 flex flex-col border-l border-slate-200">
-              {(Object.keys(MODELOS) as ModeloId[]).map((m) => (
-                <button
-                  key={m}
-                  role="tab"
-                  aria-selected={modelo === m}
-                  onClick={() => setModelo(m)}
-                  className={`-ml-px border-l-2 py-2.5 pl-4 text-left transition-colors ${
-                    modelo === m ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-800'
-                  }`}
-                >
-                  <span className="block text-sm font-medium">{MODELOS[m].nome}</span>
-                  {modelo === m && <span className="mt-0.5 block text-sm text-slate-500">{MODELOS[m].descricao}</span>}
-                </button>
-              ))}
-            </div>
+      {/* Editor real */}
+      <section className="border-b border-slate-900 bg-superficie">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 className="font-display text-4xl font-bold tracking-tight text-slate-900 uppercase sm:text-5xl">Você digita, o PDF aparece</h2>
+            <p className="max-w-sm text-sm text-slate-600">À esquerda o formulário, à direita o documento final, igualzinho ao que vai para o cliente.</p>
           </div>
-          <div key={modelo} className="mx-auto w-full max-w-lg animate-escala overflow-hidden rounded-lg border border-slate-200 shadow-[0_24px_48px_-24px_rgba(28,25,23,0.25)]">
-            <PreviaA4>
-              <DocumentoOrcamento orcamento={exemplo} empresa={{ ...EMPRESA_EXEMPLO, corTema: MODELOS[modelo].cor, layout: layoutDoModelo(modelo) }} />
-            </PreviaA4>
+          <div className="mt-8 border border-slate-900 shadow-[6px_6px_0_0_var(--color-slate-900)]">
+            <img src="/editor.webp" alt="Editor do OrçaFácil com o formulário à esquerda e a prévia do orçamento à direita" width={1440} height={900} loading="lazy" decoding="async" className="w-full" />
+          </div>
+        </div>
+      </section>
+
+      {/* Modelos */}
+      <section id="modelos" className="scroll-mt-14 border-b border-slate-900">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <h2 className="font-display text-4xl font-bold tracking-tight text-slate-900 uppercase sm:text-5xl">Cinco modelos</h2>
+          <div role="tablist" aria-label="Modelos" className="mt-8 flex flex-wrap gap-2">
+            {(Object.keys(MODELOS) as ModeloId[]).map((m) => (
+              <button
+                key={m}
+                role="tab"
+                aria-selected={modelo === m}
+                onClick={() => setModelo(m)}
+                className={`border px-4 py-2 text-sm font-medium transition-colors ${
+                  modelo === m ? 'border-slate-900 bg-slate-900 text-slate-50' : 'border-slate-300 bg-superficie text-slate-700 hover:border-slate-900'
+                }`}
+              >
+                {MODELOS[m].nome}
+              </button>
+            ))}
+          </div>
+          <div className="mt-8 grid items-start gap-8 md:grid-cols-[1fr_1.3fr]">
+            <div>
+              <p className="text-lg text-slate-800">{MODELOS[modelo].descricao}</p>
+              <p className="mt-3 text-sm text-slate-600">Todos aceitam sua logo, suas cores, três fontes, fotos em uma, duas ou três colunas e a ordem das seções que você preferir.</p>
+              <Link to={cadastro} className="btn-primario mt-6">Usar este modelo</Link>
+            </div>
+            <div key={modelo} className="mx-auto w-full max-w-md animate-escala border border-slate-900 bg-white">
+              <PreviaA4>
+                <DocumentoOrcamento orcamento={exemplo} empresa={{ ...EMPRESA_EXEMPLO, corTema: MODELOS[modelo].cor, layout: layoutDoModelo(modelo) }} />
+              </PreviaA4>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Recursos */}
-      <section id="recursos" className="scroll-mt-20 border-t border-slate-200">
-        <div className="mx-auto max-w-6xl px-4 py-20">
-          <h2 className="font-display text-4xl text-slate-900 sm:text-5xl">O que vem junto.</h2>
-          <div className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {RECURSOS.map(([icone, titulo, texto]) => (
-              <div key={titulo}>
-                <Icone nome={icone} className="h-5 w-5 text-marca-700" />
-                <h3 className="mt-3 font-semibold text-slate-900">{titulo}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-slate-600">{texto}</p>
+      <section id="recursos" className="scroll-mt-14 border-b border-slate-900 bg-superficie">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 lg:grid-cols-[1fr_2fr]">
+          <h2 className="font-display text-4xl font-bold tracking-tight text-slate-900 uppercase sm:text-5xl">O que vem junto</h2>
+          <dl className="grid gap-px border border-slate-300 bg-slate-300 sm:grid-cols-2">
+            {RECURSOS.map(([titulo, texto]) => (
+              <div key={titulo} className="bg-superficie p-5">
+                <dt className="font-semibold text-slate-900">{titulo}</dt>
+                <dd className="mt-1 text-sm text-slate-600">{texto}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
 
       {/* Perguntas */}
-      <section className="border-t border-slate-200" aria-labelledby="faq">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 lg:grid-cols-[1fr_1.6fr]">
-          <h2 id="faq" className="font-display text-4xl text-slate-900 sm:text-5xl">Perguntas frequentes</h2>
-          <div className="divide-y divide-slate-200 border-y border-slate-200">
+      <section className="border-b border-slate-900" aria-labelledby="faq">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 lg:grid-cols-[1fr_2fr]">
+          <h2 id="faq" className="font-display text-4xl font-bold tracking-tight text-slate-900 uppercase sm:text-5xl">Perguntas</h2>
+          <div className="border-t-2 border-slate-900">
             {PERGUNTAS.map(([p, r]) => (
-              <details key={p} className="group py-4">
+              <details key={p} className="group border-b border-slate-300 py-4">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-slate-900">
                   {p}
-                  <Icone nome="mais" className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-45" />
+                  <span className="font-mono text-lg text-slate-500 group-open:hidden">+</span>
+                  <span className="hidden font-mono text-lg text-slate-500 group-open:inline">−</span>
                 </summary>
-                <p className="mt-2 pr-8 text-sm leading-relaxed text-slate-600">{r}</p>
+                <p className="mt-2 max-w-2xl text-sm text-slate-600">{r}</p>
               </details>
             ))}
           </div>
@@ -162,14 +181,10 @@ export function Inicio() {
       </section>
 
       {/* Chamada final */}
-      <section className="bg-slate-900 text-slate-50">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-4 py-16 sm:flex-row sm:items-center">
-          <h2 className="font-display text-4xl leading-tight sm:text-5xl">
-            Seu próximo orçamento
-            <br />
-            em cinco minutos.
-          </h2>
-          <Link to="/entrar?modo=cadastrar" className="btn shrink-0 bg-slate-50 px-5 py-2.5 text-[15px] text-slate-900 hover:bg-slate-200">
+      <section className="bg-destaque-400 text-[#161512]">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-4 py-14 sm:flex-row sm:items-center">
+          <h2 className="font-display text-4xl leading-none font-bold tracking-tight uppercase sm:text-6xl">Próximo orçamento: 5 minutos.</h2>
+          <Link to={cadastro} className="btn shrink-0 border-[#161512] bg-[#161512] px-5 py-3 text-[15px] text-[#faf8f3] hover:bg-[#2b2822]">
             Criar conta grátis <Icone nome="seta" />
           </Link>
         </div>

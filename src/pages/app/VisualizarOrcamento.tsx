@@ -301,7 +301,7 @@ export function VisualizarOrcamento() {
           </Link>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Orçamento {formatarNumero(orc.numero)}</h1>
+              <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Orçamento {formatarNumero(orc.numero)}</h1>
               <SeloStatus status={statusExibido(orc)} />
             </div>
             <p className="truncate text-sm text-slate-500">

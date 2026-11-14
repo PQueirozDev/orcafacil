@@ -166,7 +166,7 @@ export function Painel() {
         titulo={usuario?.nome ? `Olá, ${usuario.nome.split(' ')[0]}` : 'Painel'}
         subtitulo="Acompanhe suas propostas, valores e aprovações."
         acoes={
-          <button className="btn-primario" onClick={novo}>
+          <button className="btn-destaque" onClick={novo}>
             <Icone nome="mais" /> Novo orçamento
           </button>
         }
@@ -191,7 +191,7 @@ export function Painel() {
             Adicione itens com fotos, veja a prévia em tempo real e gere o PDF. Se quiser, carregue exemplos para conhecer o app.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <button className="btn-primario" onClick={novo}>
+            <button className="btn-destaque" onClick={novo}>
               <Icone nome="mais" /> Criar orçamento
             </button>
             <button className="btn-secundario" onClick={() => void carregarExemplos()}>

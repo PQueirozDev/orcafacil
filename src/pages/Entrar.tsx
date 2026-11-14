@@ -20,20 +20,19 @@ function Moldura({ children }: { children: React.ReactNode }) {
         </div>
         <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-10">{children}</main>
       </div>
-      <aside className="hidden border-l border-slate-200 bg-slate-900 p-12 text-slate-50 lg:flex lg:flex-col lg:justify-between">
-        <span className="font-mono text-xs text-slate-400">orçafácil</span>
-        <div className="max-w-md">
-          <p className="font-display text-4xl leading-tight">Orçamento enviado de manhã, aprovado antes do almoço.</p>
-          <ul className="mt-10 space-y-3 text-sm text-slate-300">
-            {['Orçamentos salvos na nuvem, em todos os aparelhos', 'Link para o cliente aprovar pelo celular', 'Aviso assim que o cliente responder', 'Grátis para começar, sem cartão'].map((t) => (
-              <li key={t} className="flex items-center gap-3">
-                <Icone nome="check" className="h-4 w-4 text-marca-400" />
+      <aside className="papel-quadriculado hidden border-l border-slate-900 p-12 lg:flex lg:flex-col lg:justify-center">
+        <div className="mx-auto w-full max-w-md border border-slate-900 bg-superficie p-8 shadow-[6px_6px_0_0_var(--color-slate-900)]">
+          <p className="etiqueta">Por que criar conta</p>
+          <p className="mt-3 font-display text-4xl leading-none font-bold tracking-tight text-slate-900 uppercase">Enviado de manhã, <span className="grifo">aprovado</span> antes do almoço.</p>
+          <ul className="mt-8 space-y-2.5 text-sm text-slate-700">
+            {['Orçamentos salvos na nuvem, em todos os aparelhos', 'Link para o cliente aprovar pelo celular', 'Aviso assim que o cliente responder', 'Grátis, sem cartão'].map((t) => (
+              <li key={t} className="flex items-start gap-2.5">
+                <Icone nome="check" className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
                 {t}
               </li>
             ))}
           </ul>
         </div>
-        <span className="text-xs text-slate-500">Seus dados ficam protegidos: cada conta só acessa o que é seu.</span>
       </aside>
     </div>
   )
@@ -108,7 +107,7 @@ export function Entrar() {
         <div className="grid h-12 w-12 place-items-center rounded-xl border border-slate-200 text-slate-500">
           <Icone nome="email" className="h-7 w-7" />
         </div>
-        <h1 className="mt-6 font-display text-4xl text-slate-900">Confira seu e-mail</h1>
+        <h1 className="mt-6 font-display text-4xl font-bold tracking-tight text-slate-900 uppercase">Confira seu e-mail</h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           {aviso === 'confirmar'
             ? <>Enviamos um link de confirmação para <strong>{email}</strong>. Abra o link para ativar sua conta e entrar.</>
@@ -146,7 +145,7 @@ export function Entrar() {
 
   return (
     <Moldura>
-      <h1 className="font-display text-4xl text-slate-900">{titulos[modo]}</h1>
+      <h1 className="font-display text-4xl font-bold tracking-tight text-slate-900 uppercase">{titulos[modo]}</h1>
       <p className="mt-1 text-sm text-slate-500">
         {modo === 'entrar' && <>Ainda não tem conta? <button className="font-semibold text-marca-600 hover:text-marca-700" onClick={() => setModo('cadastrar')}>Cadastre-se grátis</button></>}
         {modo === 'cadastrar' && <>Já tem conta? <button className="font-semibold text-marca-600 hover:text-marca-700" onClick={() => setModo('entrar')}>Entrar</button></>}
@@ -202,7 +201,7 @@ export function Entrar() {
             {erro}
           </p>
         )}
-        <button className="btn-primario w-full py-2.5" disabled={ocupado}>
+        <button className="btn-destaque w-full py-2.5" disabled={ocupado}>
           {ocupado ? 'Aguarde…' : modo === 'entrar' ? 'Entrar' : modo === 'cadastrar' ? 'Criar conta' : 'Enviar link'}
         </button>
         {modo === 'cadastrar' && (

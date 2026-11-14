@@ -272,7 +272,7 @@ export function EditorOrcamento() {
           </Link>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Orçamento {formatarNumero(orc.numero)}</h1>
+              <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Orçamento {formatarNumero(orc.numero)}</h1>
               <SeloStatus status={exibido} />
               {erroSalvar ? (
                 <button role="status" onClick={() => void gravar()} className="rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700 ring-1 ring-red-200 hover:bg-red-100">

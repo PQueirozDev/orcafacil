@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { sair, useAuth } from '../auth'
+import { useAuth } from '../auth'
 import { db } from '../db'
 import { formatarDataHora } from '../lib/formato'
 import { useNotificacoes } from '../lib/notificacoes'
@@ -26,7 +26,7 @@ export function AlternarTema({ compacto = false }: { compacto?: boolean }) {
     const proxima = opcoes[(i + 1) % opcoes.length]
     return (
       <button
-        className="grid h-10 w-10 place-items-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+        className="grid h-9 w-9 place-items-center rounded-sm text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
         onClick={() => definirTema(proxima[0])}
         aria-label={`${atual[2]}. Mudar para: ${proxima[2]}`}
         title={atual[2]}
@@ -75,7 +75,7 @@ function IndicadorSync() {
       onClick={() => {
         void sincronizar().then(() => erro && avisar('Sincronização tentada novamente.', 'info'))
       }}
-      className="flex h-10 items-center gap-2 rounded-xl px-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
+      className="flex h-9 items-center gap-2 rounded-sm px-2 font-mono text-[11px] text-slate-600 transition-colors hover:bg-slate-100"
       title={detalhe}
       aria-label={`${texto}. ${detalhe}`}
     >
@@ -113,7 +113,7 @@ function CentralNotificacoes() {
         aria-expanded={aberta}
         aria-haspopup="dialog"
         aria-label={naoLidas ? `Notificações: ${naoLidas} não lidas` : 'Notificações'}
-        className="relative grid h-10 w-10 place-items-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+        className="relative grid h-9 w-9 place-items-center rounded-sm text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
       >
         <Icone nome="sino" className="h-[18px] w-[18px]" />
         {naoLidas > 0 && (
@@ -183,32 +183,29 @@ export function LayoutPublico() {
   const { usuario } = useAuth()
   return (
     <div className="flex min-h-screen flex-col bg-fundo">
-      <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-lg focus:bg-superficie focus:px-4 focus:py-2 focus:shadow-lg">
+      <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:bg-superficie focus:px-4 focus:py-2">
         Pular para o conteúdo
       </a>
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-fundo/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
+      <header className="sticky top-0 z-30 border-b border-slate-900 bg-fundo">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4">
           <Marca />
-          <nav aria-label="Principal" className="hidden items-center gap-7 text-sm text-slate-600 md:flex">
-            <a href="/#recursos" className="hover:text-slate-900">Recursos</a>
-            <a href="/#modelos" className="hover:text-slate-900">Modelos</a>
-            <a href="/#como-funciona" className="hover:text-slate-900">Como funciona</a>
-            <Link to="/planos" className="hover:text-slate-900">Planos</Link>
+          <nav aria-label="Principal" className="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
+            <a href="/#como-funciona" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Como funciona</a>
+            <a href="/#modelos" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Modelos</a>
+            <a href="/#recursos" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Recursos</a>
+            <Link to="/planos" className="hover:text-slate-900 hover:underline hover:decoration-2 hover:underline-offset-4">Planos</Link>
           </nav>
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-1.5">
             <AlternarTema compacto />
             {usuario ? (
               <Link to="/app" className="btn-primario">Abrir o app</Link>
-            ) : (
+            ) : nuvemDisponivel ? (
               <>
-                {nuvemDisponivel && (
-                  <>
-                    <Link to="/entrar" className="btn-fantasma px-3">Entrar</Link>
-                    <Link to="/entrar?modo=cadastrar" className="btn-primario">Criar conta</Link>
-                  </>
-                )}
-                {!nuvemDisponivel && <Link to="/app" className="btn-primario">Criar orçamento</Link>}
+                <Link to="/entrar" className="btn-fantasma hidden px-3 sm:inline-flex">Entrar</Link>
+                <Link to="/entrar?modo=cadastrar" className="btn-destaque">Criar conta</Link>
               </>
+            ) : (
+              <Link to="/app" className="btn-primario">Abrir o app</Link>
             )}
           </div>
         </div>
@@ -223,42 +220,40 @@ export function LayoutPublico() {
 
 function Rodape() {
   return (
-    <footer className="border-t border-slate-200">
+    <footer className="border-t border-slate-900 bg-fundo">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2">
           <Marca />
-          <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
-            Orçamentos profissionais com fotos, sua marca e aprovação online. Grátis, sem cartão.
-          </p>
+          <p className="mt-3 max-w-xs text-sm text-slate-600">Orçamento com fotos, sua marca e aprovação pelo celular. Grátis, sem cartão.</p>
         </div>
         <nav aria-label="Produto" className="text-sm">
-          <h2 className="font-semibold text-slate-900">Produto</h2>
-          <ul className="mt-3 space-y-2 text-slate-500">
-            <li><a href="/#recursos" className="hover:text-slate-900">Recursos</a></li>
-            <li><a href="/#modelos" className="hover:text-slate-900">Modelos</a></li>
-            <li><Link to="/planos" className="hover:text-slate-900">Planos</Link></li>
-            <li><Link to="/entrar?modo=cadastrar" className="hover:text-slate-900">Criar conta</Link></li>
+          <h2 className="etiqueta">Produto</h2>
+          <ul className="mt-3 space-y-2 text-slate-700">
+            <li><a href="/#como-funciona" className="hover:underline">Como funciona</a></li>
+            <li><a href="/#modelos" className="hover:underline">Modelos</a></li>
+            <li><Link to="/planos" className="hover:underline">Planos</Link></li>
+            <li><Link to="/entrar?modo=cadastrar" className="hover:underline">Criar conta</Link></li>
           </ul>
         </nav>
         <nav aria-label="Legal" className="text-sm">
-          <h2 className="font-semibold text-slate-900">Legal</h2>
-          <ul className="mt-3 space-y-2 text-slate-500">
-            <li><Link to="/termos" className="hover:text-slate-900">Termos de uso</Link></li>
-            <li><Link to="/privacidade" className="hover:text-slate-900">Política de privacidade</Link></li>
+          <h2 className="etiqueta">Legal</h2>
+          <ul className="mt-3 space-y-2 text-slate-700">
+            <li><Link to="/termos" className="hover:underline">Termos de uso</Link></li>
+            <li><Link to="/privacidade" className="hover:underline">Privacidade</Link></li>
             <li>
-              <a href="https://github.com/PQueirozDev/orcafacil" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900">
+              <a href="https://github.com/PQueirozDev/orcafacil" target="_blank" rel="noopener noreferrer" className="hover:underline">
                 Código aberto (MIT)
               </a>
             </li>
           </ul>
         </nav>
       </div>
-      <div className="border-t border-slate-200">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row">
+      <div className="border-t border-slate-300">
+        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-2 px-4 py-4 font-mono text-xs text-slate-500 sm:flex-row">
           <p>© {new Date().getFullYear()} OrçaFácil</p>
           <p>
-            Desenvolvido por{' '}
-            <a href="https://www.pqueirozdev.com.br/" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-700 hover:text-marca-600">
+            Feito por{' '}
+            <a href="https://www.pqueirozdev.com.br/" target="_blank" rel="noopener noreferrer" className="text-slate-800 underline underline-offset-2">
               Pedro Queiroz
             </a>
           </p>
@@ -269,12 +264,12 @@ function Rodape() {
 }
 
 // ------------------------------------------------------------------------------------------
-// Aplicativo (funciona sem conta: modo visitante)
+// Aplicativo
 // ------------------------------------------------------------------------------------------
 const LINKS_APP = [
-  { para: '/app', rotulo: 'Painel', icone: 'painel', fim: true },
-  { para: '/app/modelo', rotulo: 'Modelos', icone: 'modelos' },
+  { para: '/app', rotulo: 'Orçamentos', icone: 'documento', fim: true },
   { para: '/app/clientes', rotulo: 'Clientes', icone: 'clientes' },
+  { para: '/app/modelo', rotulo: 'Modelos', icone: 'modelos' },
   { para: '/app/configuracoes', rotulo: 'Empresa', icone: 'config' },
   { para: '/app/conta', rotulo: 'Conta', icone: 'usuario' },
 ]
@@ -282,157 +277,97 @@ const LINKS_APP = [
 export function LayoutApp() {
   const { usuario, carregando, versaoBanco } = useAuth()
   const local = useLocation()
-  const navegar = useNavigate()
-  const [menuAberto, setMenuAberto] = useState(false)
 
-  // (Re)inicia a sincronização quando a conta muda
   useEffect(() => {
     if (!carregando) iniciarSincronizacao()
   }, [carregando, usuario?.id])
 
-  useEffect(() => setMenuAberto(false), [local.pathname])
-
   if (carregando) {
-    return <div className="grid min-h-screen place-items-center bg-fundo text-sm text-slate-500">Carregando…</div>
+    return <div className="grid min-h-screen place-items-center bg-fundo font-mono text-sm text-slate-500">carregando…</div>
   }
   if (nuvemDisponivel && !usuario) {
     return <Navigate to={`/entrar?voltar=${encodeURIComponent(local.pathname + local.search)}`} replace />
   }
 
-  const nav = (
-    <nav aria-label="Aplicativo" className="flex flex-col gap-1">
-      {LINKS_APP.map((l) => (
-        <NavLink
-          key={l.para}
-          to={l.para}
-          end={l.fim}
-          className={({ isActive }) =>
-            `group relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
-              isActive ? 'bg-slate-100 text-slate-900' : 'text-slate-600 hover:bg-slate-100/70 hover:text-slate-900'
-            }`
-          }
-        >
-          {({ isActive }) => (
-            <>
-              <Icone nome={l.icone} className={`h-[18px] w-[18px] ${isActive ? 'text-marca-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
-              {l.rotulo}
-            </>
-          )}
-        </NavLink>
-      ))}
-    </nav>
-  )
-
-  const cartaoConta = usuario ? (
-    <div className="flex items-center gap-3 px-1">
-      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-marca-100 text-xs font-semibold text-marca-800">
-        {(usuario.nome || usuario.email).slice(0, 1).toUpperCase()}
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="truncate text-sm font-medium text-slate-900">{usuario.nome || 'Minha conta'}</div>
-        <div className="truncate text-xs text-slate-500">{usuario.email}</div>
-      </div>
-      <button
-        title="Sair"
-        aria-label="Sair da conta"
-        className="grid h-9 w-9 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
-        onClick={async () => {
-          await sincronizar()
-          await sair()
-          navegar('/')
-        }}
-      >
-        <Icone nome="sair" />
-      </button>
-    </div>
-  ) : (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3.5">
-      <div className="text-sm font-semibold text-slate-900">Modo visitante</div>
-      <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
-        Seus orçamentos ficam só neste navegador.
-        {nuvemDisponivel && ' Crie uma conta grátis para salvar na nuvem, usar em outros aparelhos e receber aprovações.'}
-      </p>
-      {nuvemDisponivel && (
-        <div className="mt-3 grid grid-cols-2 gap-1.5">
-          <Link to="/entrar?modo=cadastrar&voltar=/app/conta" className="btn-primario px-2 py-1.5 text-xs">
-            Criar conta
-          </Link>
-          <Link to="/entrar?voltar=/app" className="btn-secundario px-2 py-1.5 text-xs">
-            Entrar
-          </Link>
-        </div>
-      )}
-    </div>
-  )
-
-  const rodapeMenu = (
-    <div className="space-y-3 border-t border-slate-200 pt-4">
-      {cartaoConta}
-      <p className="px-1 text-[11px] text-slate-400">
-        <Link to="/termos" className="hover:text-slate-600">Termos</Link> · <Link to="/privacidade" className="hover:text-slate-600">Privacidade</Link>
-      </p>
-    </div>
-  )
-
   return (
-    <div className="min-h-screen bg-fundo lg:pl-68 print:bg-white print:pl-0">
-      <a href="#conteudo-app" className="nao-imprimir sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-lg focus:bg-superficie focus:px-4 focus:py-2 focus:shadow-lg">
+    <div className="min-h-screen bg-fundo pb-16 md:pb-0 print:bg-white print:pb-0">
+      <a href="#conteudo-app" className="nao-imprimir sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:bg-superficie focus:px-4 focus:py-2">
         Pular para o conteúdo
       </a>
 
-      {/* Barra lateral (desktop) */}
-      <aside className="nao-imprimir fixed inset-y-0 left-0 hidden w-68 flex-col border-r border-slate-200/80 bg-superficie p-4 lg:flex">
-        <div className="mb-6 px-1.5 pt-1">
-          <Marca para="/app" />
-        </div>
-        <div className="flex-1 overflow-y-auto">{nav}</div>
-        {rodapeMenu}
-      </aside>
-
       {/* Barra superior */}
-      <header className="nao-imprimir sticky top-0 z-30 flex h-16 items-center justify-between gap-2 border-b border-slate-200/80 bg-superficie/85 px-4 backdrop-blur sm:px-6">
-        <div className="lg:hidden">
+      <header className="nao-imprimir sticky top-0 z-30 border-b border-slate-900 bg-fundo">
+        <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4 sm:px-6">
           <Marca para="/app" />
-        </div>
-        <div className="hidden lg:block" />
-        <div className="flex items-center gap-1">
-          <IndicadorSync />
-          <CentralNotificacoes />
-          <AlternarTema compacto />
-          <button
-            aria-label="Abrir menu"
-            aria-expanded={menuAberto}
-            aria-controls="menu-celular"
-            className="grid h-10 w-10 place-items-center rounded-xl text-slate-600 transition hover:bg-slate-100 lg:hidden"
-            onClick={() => setMenuAberto(true)}
-          >
-            <Icone nome="menu" className="h-5 w-5" />
-          </button>
+          <nav aria-label="Aplicativo" className="hidden h-full items-stretch gap-1 md:flex">
+            {LINKS_APP.map((l) => (
+              <NavLink
+                key={l.para}
+                to={l.para}
+                end={l.fim}
+                className={({ isActive }) =>
+                  `flex items-center border-b-2 px-2.5 text-sm font-medium transition-colors ${
+                    isActive ? 'border-slate-900 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'
+                  }`
+                }
+              >
+                {l.rotulo}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="ml-auto flex items-center gap-0.5">
+            <IndicadorSync />
+            <CentralNotificacoes />
+            <AlternarTema compacto />
+            {usuario && (
+              <Link
+                to="/app/conta"
+                title={usuario.email}
+                aria-label="Minha conta"
+                className="ml-1 grid h-8 w-8 place-items-center rounded-sm bg-slate-900 font-mono text-xs font-semibold text-slate-50"
+              >
+                {(usuario.nome || usuario.email).slice(0, 1).toUpperCase()}
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
-      {menuAberto && (
-        <div id="menu-celular" className="nao-imprimir fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu">
-          <div className="absolute inset-0 animate-surgir bg-slate-900/40 backdrop-blur-sm" onClick={() => setMenuAberto(false)} />
-          <div className="absolute inset-y-0 right-0 flex w-[min(20rem,85vw)] animate-[deslizar_0.3s_cubic-bezier(0.22,1,0.36,1)] flex-col bg-superficie p-4 shadow-2xl">
-            <div className="mb-6 flex items-center justify-between">
-              <Marca para="/app" />
-              <button aria-label="Fechar menu" autoFocus className="grid h-10 w-10 place-items-center rounded-xl text-slate-500 hover:bg-slate-100" onClick={() => setMenuAberto(false)}>
-                <Icone nome="x" className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto">{nav}</div>
-            {rodapeMenu}
-          </div>
+      {!usuario && (
+        <div className="nao-imprimir border-b border-slate-300 bg-destaque-200 px-4 py-2 text-center text-xs text-[#161512]">
+          Modo local (sem nuvem configurada): os dados ficam só neste navegador.
         </div>
       )}
 
-      <main id="conteudo-app" className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8 print:max-w-none print:p-0">
-        {/* key: remonta a tela ao trocar de rota (animação) ou de banco (entrar/sair da conta) */}
+      <main id="conteudo-app" className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-8 print:max-w-none print:p-0">
         <div key={`${versaoBanco}:${local.pathname}`} className="animate-entrada print:animate-none">
           <Outlet />
         </div>
       </main>
+
+      <footer className="nao-imprimir mx-auto hidden max-w-7xl justify-between px-6 pb-8 font-mono text-[11px] text-slate-400 md:flex">
+        <span>OrçaFácil</span>
+        <span>
+          <Link to="/termos" className="hover:text-slate-700">termos</Link> · <Link to="/privacidade" className="hover:text-slate-700">privacidade</Link>
+        </span>
+      </footer>
+
+      {/* Navegação inferior (celular) */}
+      <nav aria-label="Aplicativo" className="nao-imprimir fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-slate-900 bg-fundo md:hidden">
+        {LINKS_APP.map((l) => (
+          <NavLink
+            key={l.para}
+            to={l.para}
+            end={l.fim}
+            className={({ isActive }) =>
+              `flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isActive ? 'bg-destaque-300 text-[#161512]' : 'text-slate-500'}`
+            }
+          >
+            <Icone nome={l.icone} className="h-5 w-5" />
+            {l.rotulo}
+          </NavLink>
+        ))}
+      </nav>
     </div>
   )
 }

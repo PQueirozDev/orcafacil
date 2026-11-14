@@ -50,23 +50,22 @@ import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'rea
 import { Link } from 'react-router-dom'
 import { ROTULO_STATUS, type StatusExibido } from '../lib/status'
 
+/** Símbolo: um carimbo de "aprovado" (quadrado de tinta com o visto em amarelo marca-texto). */
 export function Simbolo({ className = 'h-7 w-7' }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-      <rect width="32" height="32" rx="7" className="fill-slate-900" />
-      <path d="M10 8.5h8.2l3.8 3.8v11.2H10z" fill="none" className="stroke-slate-50" strokeWidth="1.8" strokeLinejoin="round" />
-      <path d="M13.2 18.2l2.2 2.2 4-4.4" fill="none" stroke="#4c9c85" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="1" y="1" width="30" height="30" rx="3" className="fill-slate-900" />
+      <rect x="4" y="4" width="24" height="24" rx="1.5" fill="none" className="stroke-slate-50" strokeWidth="1.2" strokeDasharray="2.4 1.6" />
+      <path d="M9.5 16.5l4.2 4.2L22.5 11" fill="none" stroke="#ffd60a" strokeWidth="3.2" strokeLinecap="square" />
     </svg>
   )
 }
 
 export function Marca({ para = '/' }: { para?: string }) {
   return (
-    <Link to={para} className="flex items-center gap-2 rounded-md" aria-label="OrçaFácil, página inicial">
+    <Link to={para} className="flex shrink-0 items-center gap-2" aria-label="OrçaFácil, página inicial">
       <Simbolo />
-      <span className="text-[17px] font-semibold tracking-tight text-slate-900">
-        OrçaFácil
-      </span>
+      <span className="font-display text-[19px] font-bold tracking-tight text-slate-900">OrçaFácil</span>
     </Link>
   )
 }
@@ -107,7 +106,7 @@ export const STATUS: Record<StatusExibido, { rotulo: string; classe: string; pon
 export function SeloStatus({ status }: { status: StatusExibido }) {
   const s = STATUS[status]
   return (
-    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${s.classe}`}>
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-1.5 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wide ring-1 ring-inset ${s.classe}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${s.ponto}`} />
       {s.rotulo}
     </span>
@@ -116,9 +115,9 @@ export function SeloStatus({ status }: { status: StatusExibido }) {
 
 export function Titulo({ titulo, subtitulo, acoes }: { titulo: string; subtitulo?: string; acoes?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-5">
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div className="max-w-2xl">
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{titulo}</h1>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{titulo}</h1>
         {subtitulo && <p className="mt-1 text-sm text-slate-500">{subtitulo}</p>}
       </div>
       {acoes && <div className="flex flex-wrap items-center gap-2">{acoes}</div>}
