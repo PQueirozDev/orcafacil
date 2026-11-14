@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /proposta/
+Disallow: /entrar
+Disallow: /redefinir-senha
+
+Sitemap: https://orcafacil.pqueirozdev.com.br/sitemap.xml

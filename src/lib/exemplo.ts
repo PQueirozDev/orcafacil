@@ -1,4 +1,4 @@
-import { db, novoId, type Empresa, type Orcamento } from '../db'
+import { db, EMPRESA_PADRAO, novoId, registrarEvento, type Empresa, type Orcamento } from '../db'
 
 /** Gera uma "foto" ilustrativa em SVG para os dados de demonstração. */
 function fotoExemplo(c1: string, c2: string, forma: 'cozinha' | 'armario' | 'bancada' | 'sala') {
@@ -17,23 +17,27 @@ function fotoExemplo(c1: string, c2: string, forma: 'cozinha' | 'armario' | 'ban
 }
 
 export const EMPRESA_EXEMPLO: Empresa = {
+  ...EMPRESA_PADRAO,
   id: 'principal',
   nome: 'Marcenaria Bom Lar',
   documento: '12.345.678/0001-90',
-  email: 'contato@bomlar.com.br',
+  email: 'contato@exemplo.com.br',
   telefone: '(11) 98765-4321',
   endereco: 'Rua das Acácias, 120 — São Paulo/SP',
-  site: 'bomlar.com.br',
+  site: 'exemplo.com.br',
   responsavel: 'Carlos Andrade',
   corTema: '#0f766e',
   proximoNumero: 1,
   validadePadraoDias: 15,
   condicoesPadrao: '50% de entrada e 50% na entrega.\nPix, transferência ou cartão em até 6x.',
+  dadosPagamento: 'Pix (CNPJ): 12.345.678/0001-90',
+  termosPadrao: 'Garantia de 2 anos contra defeitos de fabricação. Prazo contado a partir da aprovação e do pagamento da entrada.',
 }
 
 export function orcamentoExemplo(numero = 42): Orcamento {
   const agora = Date.now()
   return {
+    uid: novoId(),
     numero,
     titulo: 'Cozinha planejada em MDF',
     cliente: {
@@ -51,7 +55,7 @@ export function orcamentoExemplo(numero = 42): Orcamento {
         quantidade: 3.2,
         unidade: 'm',
         valorUnitario: 1250,
-        foto: fotoExemplo('#99f6e4', '#0f766e', 'armario'),
+        foto: fotoExemplo('#e7e5e4', '#a8a29e', 'armario'),
       },
       {
         id: novoId(),
@@ -60,7 +64,7 @@ export function orcamentoExemplo(numero = 42): Orcamento {
         quantidade: 2.8,
         unidade: 'm',
         valorUnitario: 1480,
-        foto: fotoExemplo('#fde68a', '#b45309', 'bancada'),
+        foto: fotoExemplo('#efe9df', '#c4b49a', 'bancada'),
       },
       {
         id: novoId(),
@@ -72,66 +76,71 @@ export function orcamentoExemplo(numero = 42): Orcamento {
       },
     ],
     fotos: [
-      { id: novoId(), src: fotoExemplo('#a5f3fc', '#0e7490', 'cozinha'), legenda: 'Projeto 3D — vista geral' },
-      { id: novoId(), src: fotoExemplo('#ddd6fe', '#6d28d9', 'sala'), legenda: 'Ambiente integrado à sala' },
+      { id: novoId(), src: fotoExemplo('#dfe7e2', '#8fa99d', 'cozinha'), legenda: 'Projeto 3D — vista geral' },
+      { id: novoId(), src: fotoExemplo('#ece6dc', '#b5a68c', 'sala'), legenda: 'Ambiente integrado à sala' },
     ],
     descontoTipo: 'percentual',
     desconto: 5,
+    impostoPercentual: 0,
     frete: 0,
+    termos: EMPRESA_EXEMPLO.termosPadrao,
     observacoes: 'Medidas finais confirmadas após visita técnica.\nGarantia de 2 anos.',
     condicoesPagamento: EMPRESA_EXEMPLO.condicoesPadrao,
     prazoEntrega: '25 dias úteis',
     validadeDias: 15,
-    status: 'enviado',
+    status: 'pendente',
     criadoEm: agora,
     atualizadoEm: agora,
   }
 }
 
-/** Preenche o banco local com dados de demonstração. */
+/**
+ * Preenche o banco com 3 orçamentos de EXEMPLO (marcados assim no título e no cliente),
+ * para a pessoa ver como o app funciona. Ficam como rascunho: não contam como propostas reais.
+ */
 export async function carregarExemplos() {
-  await db.transaction('rw', db.empresa, db.clientes, db.orcamentos, async () => {
+  await db.transaction('rw', [db.empresa, db.clientes, db.orcamentos, db.eventos], async () => {
     const empresa = await db.empresa.get('principal')
     let numero = empresa?.proximoNumero ?? 1
-    const dia = 24 * 60 * 60 * 1000
+    const dia = 86_400_000
+    const agora = Date.now()
 
+    const base = orcamentoExemplo()
     const clientes = [
-      orcamentoExemplo().cliente,
-      { nome: 'Restaurante Sabor & Arte', documento: '98.765.432/0001-10', email: 'compras@saborearte.com', telefone: '(11) 3333-2222', endereco: 'Rua Augusta, 900 — São Paulo/SP' },
-      { nome: 'João Pereira', documento: '', email: 'joao.p@email.com', telefone: '(11) 97777-1111', endereco: 'Rua Vergueiro, 55 — São Paulo/SP' },
+      { ...base.cliente, nome: 'Mariana Souza (exemplo)' },
+      { nome: 'Restaurante Sabor & Arte (exemplo)', documento: '', email: 'compras@exemplo.com', telefone: '(11) 3333-2222', endereco: 'Rua Augusta, 900 — São Paulo/SP' },
+      { nome: 'João Pereira (exemplo)', documento: '', email: 'joao@exemplo.com', telefone: '(11) 97777-1111', endereco: 'Rua Vergueiro, 55 — São Paulo/SP' },
+    ].map((c) => ({ ...c, uid: novoId(), observacoes: '', criadoEm: agora, atualizadoEm: agora }))
+    await db.clientes.bulkAdd(clientes)
+
+    const novos: Orcamento[] = [
+      { ...orcamentoExemplo(numero++), titulo: '[Exemplo] Cozinha planejada em MDF', status: 'rascunho' },
+      {
+        ...orcamentoExemplo(numero++),
+        titulo: '[Exemplo] Balcão de atendimento e prateleiras',
+        status: 'rascunho',
+        desconto: 0,
+        frete: 180,
+        criadoEm: agora - 6 * dia,
+        atualizadoEm: agora - 4 * dia,
+      },
+      {
+        ...orcamentoExemplo(numero++),
+        titulo: '[Exemplo] Guarda-roupa casal 6 portas',
+        status: 'rascunho',
+        fotos: [],
+        criadoEm: agora - 2 * dia,
+        atualizadoEm: agora - 2 * dia,
+      },
     ]
-    const ids = await db.clientes.bulkAdd(clientes.map((c) => ({ ...c, criadoEm: Date.now() })), { allKeys: true })
+    novos[1].fotos = [novos[1].fotos[1]]
+    novos[2].itens = [{ ...novos[2].itens[0], descricao: 'Guarda-roupa 6 portas', quantidade: 1, unidade: 'un', valorUnitario: 4890 }]
+    for (const [i, o] of novos.entries()) {
+      const { nome, documento, email, telefone, endereco } = clientes[i]
+      await db.orcamentos.add({ ...o, clienteUid: clientes[i].uid, cliente: { nome, documento, email, telefone, endereco } })
+      await registrarEvento(o.uid, 'criacao')
+    }
 
-    const o1 = orcamentoExemplo(numero++)
-    await db.orcamentos.add({ ...o1, clienteId: ids[0] as number })
-
-    const o2 = orcamentoExemplo(numero++)
-    await db.orcamentos.add({
-      ...o2,
-      titulo: 'Balcão de atendimento e prateleiras',
-      clienteId: ids[1] as number,
-      cliente: clientes[1],
-      status: 'aprovado',
-      desconto: 0,
-      frete: 180,
-      fotos: [o2.fotos[1]],
-      criadoEm: Date.now() - 6 * dia,
-      atualizadoEm: Date.now() - 4 * dia,
-    })
-
-    const o3 = orcamentoExemplo(numero++)
-    await db.orcamentos.add({
-      ...o3,
-      titulo: 'Guarda-roupa casal 6 portas',
-      clienteId: ids[2] as number,
-      cliente: clientes[2],
-      status: 'rascunho',
-      itens: [{ ...o3.itens[0], descricao: 'Guarda-roupa 6 portas', quantidade: 1, unidade: 'un', valorUnitario: 4890 }],
-      fotos: [],
-      criadoEm: Date.now() - 2 * dia,
-      atualizadoEm: Date.now() - 2 * dia,
-    })
-
-    await db.empresa.put({ ...(empresa ?? EMPRESA_EXEMPLO), proximoNumero: numero })
+    await db.empresa.put({ ...(empresa ?? EMPRESA_EXEMPLO), proximoNumero: numero, atualizadoEm: agora })
   })
 }

@@ -59,9 +59,9 @@ export function confirmar(opcoes: Omit<Confirmacao, 'responder'>): Promise<boole
 }
 
 const ESTILO: Record<TipoAviso, { classe: string; icone: string }> = {
-  sucesso: { classe: 'bg-emerald-500', icone: 'check' },
+  sucesso: { classe: 'bg-emerald-600', icone: 'check' },
   erro: { classe: 'bg-red-500', icone: 'x' },
-  info: { classe: 'bg-marca-500', icone: 'raio' },
+  info: { classe: 'bg-slate-600', icone: 'alerta' },
 }
 
 export function Avisos() {
@@ -89,9 +89,9 @@ export function Avisos() {
           <div
             key={a.id}
             role="status"
-            className="pointer-events-auto flex animate-escala items-center gap-3 rounded-2xl bg-slate-900/95 py-2.5 pl-2.5 pr-4 text-sm text-white shadow-2xl ring-1 ring-white/10 backdrop-blur"
+            className="pointer-events-auto flex animate-escala items-center gap-3 rounded-lg bg-slate-900 py-2 pl-2 pr-3.5 text-sm text-slate-50 shadow-lg"
           >
-            <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${ESTILO[a.tipo].classe}`}>
+            <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-md text-white ${ESTILO[a.tipo].classe}`}>
               <Icone nome={ESTILO[a.tipo].icone} className="h-4 w-4" />
             </span>
             {a.texto}
@@ -102,11 +102,11 @@ export function Avisos() {
       {c && (
         <div className="fixed inset-0 z-[80] grid place-items-center p-4" role="dialog" aria-modal="true" aria-labelledby="titulo-confirmacao">
           <div className="absolute inset-0 animate-surgir bg-slate-900/50 backdrop-blur-sm" onClick={() => c.responder(false)} />
-          <div className="relative w-full max-w-sm animate-escala rounded-3xl bg-white p-6 shadow-2xl">
-            <div className={`grid h-12 w-12 place-items-center rounded-2xl ${c.perigo ? 'bg-red-50 text-red-600' : 'bg-marca-50 text-marca-600'}`}>
+          <div className="relative w-full max-w-sm animate-escala rounded-2xl bg-superficie p-6 shadow-2xl">
+            <div className={`grid h-12 w-12 place-items-center rounded-xl ${c.perigo ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-600'}`}>
               <Icone nome={c.perigo ? 'lixo' : 'documento'} className="h-6 w-6" />
             </div>
-            <h2 id="titulo-confirmacao" className="mt-4 text-lg font-bold text-slate-900">
+            <h2 id="titulo-confirmacao" className="mt-4 text-base font-semibold text-slate-900">
               {c.titulo}
             </h2>
             {c.mensagem && <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{c.mensagem}</p>}
@@ -116,7 +116,7 @@ export function Avisos() {
               </button>
               <button
                 ref={botaoOk}
-                className={c.perigo ? 'btn bg-red-600 text-white shadow-md shadow-red-600/25 hover:bg-red-700' : 'btn-primario'}
+                className={c.perigo ? 'btn bg-red-600 text-white hover:bg-red-700' : 'btn-primario'}
                 onClick={() => c.responder(true)}
               >
                 {c.botao ?? 'Confirmar'}

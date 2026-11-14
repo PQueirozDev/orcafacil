@@ -1,184 +1,151 @@
+import type { Session } from '@supabase/supabase-js'
 import { useSyncExternalStore } from 'react'
+import { trocarBanco } from './db'
+import { supabase } from './lib/supabase'
 
 /**
- * Autenticação e assinatura FICTÍCIAS (modo demonstração).
- * Tudo fica no localStorage — nenhuma cobrança ou servidor real.
+ * Sessão de usuário com Supabase Auth.
+ * Sem login o app funciona como "visitante" (dados só neste navegador).
+ * Com login, os dados da conta ficam num banco local próprio e são sincronizados com a nuvem.
  */
 
-export type PlanoId = 'basico' | 'profissional' | 'empresa'
-export type Ciclo = 'mensal' | 'anual'
-
-export interface Sessao {
-  nome: string
+export interface Usuario {
+  id: string
   email: string
-}
-
-export interface Assinatura {
-  plano: PlanoId
-  ciclo: Ciclo
-  ativadaEm: number
-  renovaEm: number
-  metodo: 'cartao' | 'pix'
-  final?: string
-}
-
-export interface Plano {
-  id: PlanoId
   nome: string
-  descricao: string
-  precoMensal: number
-  destaque?: boolean
-  recursos: string[]
 }
 
-export const PLANOS: Plano[] = [
-  {
-    id: 'basico',
-    nome: 'Básico',
-    descricao: 'Para autônomos que estão começando.',
-    precoMensal: 29.9,
-    recursos: ['Até 30 orçamentos por mês', 'PDF com sua logo', 'Até 5 fotos por orçamento', 'Cadastro de clientes'],
-  },
-  {
-    id: 'profissional',
-    nome: 'Profissional',
-    descricao: 'Para pequenas empresas que vendem todo dia.',
-    precoMensal: 59.9,
-    destaque: true,
-    recursos: [
-      'Orçamentos ilimitados',
-      'Fotos ilimitadas e foto por item',
-      'Cores personalizadas no PDF',
-      'Backup e restauração',
-      'Suporte por WhatsApp',
-    ],
-  },
-  {
-    id: 'empresa',
-    nome: 'Empresa',
-    descricao: 'Para equipes com vários vendedores.',
-    precoMensal: 119.9,
-    recursos: [
-      'Tudo do Profissional',
-      'Até 10 usuários',
-      'Modelos de orçamento por equipe',
-      'Relatórios de conversão',
-      'Gerente de conta dedicado',
-    ],
-  },
-]
-
-export const DESCONTO_ANUAL = 0.2
-
-export function precoPorMes(plano: Plano, ciclo: Ciclo) {
-  return ciclo === 'anual' ? plano.precoMensal * (1 - DESCONTO_ANUAL) : plano.precoMensal
+interface Estado {
+  carregando: boolean
+  usuario: Usuario | null
+  /** Incrementa quando o banco local é trocado (entrar/sair): força remontar as telas. */
+  versaoBanco: number
 }
 
-export function precoTotal(plano: Plano, ciclo: Ciclo) {
-  return ciclo === 'anual' ? precoPorMes(plano, ciclo) * 12 : plano.precoMensal
-}
-
-export function obterPlano(id: string | undefined) {
-  return PLANOS.find((p) => p.id === id)
-}
-
-const CHAVE_SESSAO = 'orcafacil:sessao'
-const CHAVE_ASSINATURA = 'orcafacil:assinatura'
+let estado: Estado = { carregando: !!supabase, usuario: null, versaoBanco: 0 }
 const ouvintes = new Set<() => void>()
 
-function ler<T>(chave: string): T | null {
-  try {
-    const bruto = localStorage.getItem(chave)
-    return bruto ? (JSON.parse(bruto) as T) : null
-  } catch {
-    return null
-  }
-}
-
-let memoria: Record<string, unknown> = {}
-let cache: { sessao: Sessao | null; assinatura: Assinatura | null } | undefined
-
-function gravar(chave: string, valor: unknown) {
-  memoria = { ...memoria, [chave]: valor }
-  try {
-    if (valor === null) localStorage.removeItem(chave)
-    else localStorage.setItem(chave, JSON.stringify(valor))
-  } catch {
-    /* armazenamento indisponível — segue só em memória */
-  }
-  cache = undefined
+function definir(parcial: Partial<Estado>) {
+  estado = { ...estado, ...parcial }
   ouvintes.forEach((f) => f())
 }
 
-function lerComMemoria<T>(chave: string): T | null {
-  if (chave in memoria) return memoria[chave] as T | null
-  return ler<T>(chave)
+function usuarioDaSessao(s: Session | null): Usuario | null {
+  if (!s?.user) return null
+  const meta = s.user.user_metadata ?? {}
+  return {
+    id: s.user.id,
+    email: s.user.email ?? '',
+    nome: String(meta.nome ?? meta.full_name ?? s.user.email?.split('@')[0] ?? ''),
+  }
 }
 
-function snapshot() {
-  if (!cache) {
-    cache = {
-      sessao: lerComMemoria<Sessao>(CHAVE_SESSAO),
-      assinatura: lerComMemoria<Assinatura>(CHAVE_ASSINATURA),
-    }
-  }
-  return cache
+function aplicarSessao(s: Session | null) {
+  const usuario = usuarioDaSessao(s)
+  const mudouBanco = trocarBanco(usuario?.id ?? null)
+  definir({
+    carregando: false,
+    usuario,
+    versaoBanco: mudouBanco ? estado.versaoBanco + 1 : estado.versaoBanco,
+  })
 }
 
-function inscrever(f: () => void) {
-  ouvintes.add(f)
-  const aoMudarStorage = (e: StorageEvent) => {
-    if (e.key?.startsWith('orcafacil:')) {
-      memoria = {}
-      cache = undefined
-      f()
-    }
-  }
-  window.addEventListener('storage', aoMudarStorage)
-  return () => {
-    ouvintes.delete(f)
-    window.removeEventListener('storage', aoMudarStorage)
-  }
+let ultimoEvento = ''
+if (supabase) {
+  supabase.auth.getSession().then(({ data }) => aplicarSessao(data.session))
+  supabase.auth.onAuthStateChange((evento, sessao) => {
+    ultimoEvento = evento
+    // Evita trabalho em renovações de token que não mudam o usuário
+    if (evento === 'TOKEN_REFRESHED' && sessao?.user.id === estado.usuario?.id) return
+    aplicarSessao(sessao)
+  })
 }
+
+/** Último evento de autenticação (ex.: PASSWORD_RECOVERY ao abrir o link de redefinição). */
+export const eventoDeAuth = () => ultimoEvento
 
 export function useAuth() {
-  return useSyncExternalStore(inscrever, snapshot)
+  return useSyncExternalStore(
+    (f) => {
+      ouvintes.add(f)
+      return () => ouvintes.delete(f)
+    },
+    () => estado,
+  )
 }
 
-export function entrar(sessao: Sessao) {
-  gravar(CHAVE_SESSAO, sessao)
+export const usuarioAtual = () => estado.usuario
+
+function exigirSupabase() {
+  if (!supabase) throw new Error('A conta na nuvem não está configurada neste ambiente.')
+  return supabase
 }
 
-/** Modo de testes: entra sem preencher e-mail e senha. */
-export function entrarComoVisitante() {
-  entrar({ nome: 'Visitante', email: 'visitante@demo.orcafacil' })
+const origem = () => window.location.origin
+
+export async function cadastrar(nome: string, email: string, senha: string) {
+  const { data, error } = await exigirSupabase().auth.signUp({
+    email,
+    password: senha,
+    options: { data: { nome }, emailRedirectTo: `${origem()}/app` },
+  })
+  if (error) throw error
+  // Sem sessão = o projeto exige confirmação por e-mail
+  return { precisaConfirmar: !data.session }
 }
 
-/** Modo de testes: entra e ativa o plano Profissional sem passar pelo pagamento. */
-export function testarSemCadastro() {
-  if (!snapshot().sessao) entrarComoVisitante()
-  if (!snapshot().assinatura) assinar('profissional', 'mensal', 'pix')
+export async function entrar(email: string, senha: string) {
+  const { error } = await exigirSupabase().auth.signInWithPassword({ email, password: senha })
+  if (error) throw error
 }
 
-export function sair() {
-  gravar(CHAVE_SESSAO, null)
+export async function entrarComGoogle() {
+  const { error } = await exigirSupabase().auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: `${origem()}/app` },
+  })
+  if (error) throw error
 }
 
-export function assinar(plano: PlanoId, ciclo: Ciclo, metodo: Assinatura['metodo'], final?: string) {
-  const agora = new Date()
-  const renova = new Date(agora)
-  renova.setMonth(renova.getMonth() + (ciclo === 'anual' ? 12 : 1))
-  const assinatura: Assinatura = {
-    plano,
-    ciclo,
-    metodo,
-    final,
-    ativadaEm: agora.getTime(),
-    renovaEm: renova.getTime(),
+export async function reenviarConfirmacao(email: string) {
+  const { error } = await exigirSupabase().auth.resend({
+    type: 'signup',
+    email,
+    options: { emailRedirectTo: `${origem()}/app` },
+  })
+  if (error) throw error
+}
+
+export async function recuperarSenha(email: string) {
+  const { error } = await exigirSupabase().auth.resetPasswordForEmail(email, {
+    redirectTo: `${origem()}/redefinir-senha`,
+  })
+  if (error) throw error
+}
+
+export async function redefinirSenha(novaSenha: string) {
+  const { error } = await exigirSupabase().auth.updateUser({ password: novaSenha })
+  if (error) throw error
+}
+
+export async function sair() {
+  if (!supabase) return
+  await supabase.auth.signOut()
+}
+
+export async function atualizarNome(nome: string) {
+  const sb = exigirSupabase()
+  const { error } = await sb.auth.updateUser({ data: { nome } })
+  if (error) throw error
+  if (estado.usuario) {
+    await sb.from('perfis').update({ nome }).eq('id', estado.usuario.id)
+    definir({ usuario: { ...estado.usuario, nome } })
   }
-  gravar(CHAVE_ASSINATURA, assinatura)
 }
 
-export function cancelarAssinatura() {
-  gravar(CHAVE_ASSINATURA, null)
+/** Regras mínimas de senha (o Supabase também valida no servidor). */
+export function problemaNaSenha(senha: string): string | null {
+  if (senha.length < 8) return 'Use pelo menos 8 caracteres.'
+  if (!/[a-zA-Z]/.test(senha) || !/\d/.test(senha)) return 'Misture letras e números.'
+  return null
 }
